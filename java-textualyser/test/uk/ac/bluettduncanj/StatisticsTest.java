@@ -2,7 +2,7 @@
  * StatisticsTest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import static org.junit.Assert.*;
 
@@ -127,7 +127,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#Statistics()}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#Statistics()}.
    */
   @Test
   public void testStatistics() {
@@ -137,7 +137,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#reset()}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#reset()}.
    */
   @Test
   public void testReset() {
@@ -149,7 +149,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcCharFreq(char[])}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcCharFreq(char[])}.
    */
   @Test
   public void testCalcCharFreq() {
@@ -172,7 +172,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcAvgSentenceLen(java.util.List)}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcAvgSentenceLen(java.util.List)}.
    */
   @Test
   public void testCalcAvgSentenceLen() {
@@ -180,7 +180,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcAvgWordLen(java.util.List)}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcAvgWordLen(java.util.List)}.
    */
   @Test
   public void testCalcAvgWordLen() {
@@ -188,7 +188,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcNoOfEnglishANs(char[])}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcNoOfEnglishANs(char[])}.
    */
   @Test
   public void testCalcNoOfEnglishANs() {
@@ -196,7 +196,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcNoOfNonANs(char[])}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcNoOfNonANs(char[])}.
    */
   @Test
   public void testCalcNoOfNonANs() {
@@ -204,7 +204,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcNoOfWhitespaces(char[], int)}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcNoOfWhitespaces(char[], int)}.
    */
   @Test
   public void testCalcNoOfWhitespaces() {
@@ -212,7 +212,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#isWhitespace(char)}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#isWhitespace(char)}.
    */
   @Test
   public void testIsWhitespace() {
@@ -220,7 +220,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcNoOfIntlChars(char[])}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcNoOfIntlChars(char[])}.
    */
   @Test
   public void testCalcNoOfIntlChars() {
@@ -228,7 +228,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcNoOfSuffixes(java.util.List)}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcNoOfSuffixes(java.util.List)}.
    */
   @Test
   public void testCalcNoOfSuffixes() {
@@ -236,7 +236,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#calcNoOfTextOCs(char[], char[])}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#calcNoOfTextOCs(char[], char[])}.
    */
   @Test
   public void testCalcNoOfTextOCs() {
@@ -244,7 +244,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.Statistics#toString()}.
+   * Test method for {@link uk.ac.bluettduncanj.Statistics#toString()}.
    */
   @Test
   public void testToString() {

@@ -2,9 +2,10 @@
  * FileAnalyserTest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class FileAnalyserTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.FileAnalyser#getInstance()}.
+   * Test method for {@link uk.ac.bluettduncanj.FileAnalyser#getInstance()}.
    */
   @Test
   public void testGetInstance() {

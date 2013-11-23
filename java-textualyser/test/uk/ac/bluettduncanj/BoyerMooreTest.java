@@ -2,7 +2,7 @@
  * BoyerMooreTest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import static org.junit.Assert.*;
 
@@ -15,7 +15,7 @@ import org.junit.Test;
 public class BoyerMooreTest {
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.BoyerMoore#BoyerMoore(char[], int)}.
+   * Test method for {@link uk.ac.bluettduncanj.BoyerMoore#BoyerMoore(char[], int)}.
    */
   @Test
   public void testBoyerMoore() {
@@ -30,7 +30,7 @@ public class BoyerMooreTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.BoyerMoore#search(char[])}.
+   * Test method for {@link uk.ac.bluettduncanj.BoyerMoore#search(char[])}.
    */
   @Test
   public void testSearch() {

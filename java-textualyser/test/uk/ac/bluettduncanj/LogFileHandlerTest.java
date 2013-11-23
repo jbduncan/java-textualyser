@@ -2,7 +2,7 @@
  * LogFileHandlerTest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import static org.junit.Assert.*;
 
@@ -38,7 +38,7 @@ public class LogFileHandlerTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.LogFileHandler#LogFileHandler(java.lang.String, java.lang.String, java.lang.String)}.
+   * Test method for {@link uk.ac.bluettduncanj.LogFileHandler#LogFileHandler(java.lang.String, java.lang.String, java.lang.String)}.
    */
   @Test
   public void testLogFileHandler() {

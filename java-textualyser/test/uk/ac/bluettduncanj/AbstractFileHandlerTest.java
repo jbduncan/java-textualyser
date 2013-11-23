@@ -2,7 +2,7 @@
  * AbstractFileHandlerTest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import static org.junit.Assert.*;
 
@@ -43,7 +43,7 @@ public class AbstractFileHandlerTest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.AbstractFileHandler#AbstractFileHandler()}.
+   * Test method for {@link uk.ac.bluettduncanj.AbstractFileHandler#AbstractFileHandler()}.
    */
   @Test
   public void testAbstractFileHandler() {

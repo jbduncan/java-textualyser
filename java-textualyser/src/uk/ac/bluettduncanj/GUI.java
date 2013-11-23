@@ -2,7 +2,7 @@
  * GUI.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import java.awt.Component;
 import java.awt.EventQueue;

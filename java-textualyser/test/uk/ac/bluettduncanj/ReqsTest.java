@@ -2,7 +2,7 @@
  * RequirementsTest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import org.junit.Test;
 

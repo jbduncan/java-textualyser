@@ -2,7 +2,7 @@
  * FileAnalyser.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -136,7 +136,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * It will also be thrown if options[2] (the option determining whether 'Text Occurrences' will be calculated) == true 
    * && args[0] (the pattern argument) == null.
    *
-   * @see uk.ac.surrey.com1028.jb00359.textAnalyser.IFileAnalyser#setOptions(boolean[], java.lang.Object)
+   * @see uk.ac.bluettduncanj.IFileAnalyser#setOptions(boolean[], java.lang.Object)
    */
   public void setOptions(boolean[] options, String[] args) throws IllegalArgumentException {
     if (options.length != 3) {
@@ -159,7 +159,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * 
    * @throws NullStringException: This exception will be thrown if the file name or directory are null (not set).
    *
-   * @see uk.ac.surrey.com1028.jb00359.textAnalyser.IFileAnalyser#process()
+   * @see uk.ac.bluettduncanj.IFileAnalyser#process()
    */
   @Override
   public void process() throws NullStringException {
@@ -567,7 +567,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
    * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter). 
    *
-   * @see uk.ac.surrey.com1028.jb00359.textAnalyser.IFileAnalyser#saveLog()
+   * @see uk.ac.bluettduncanj.IFileAnalyser#saveLog()
    */
   @Override
   public void saveLog() throws NullStringException, FileNotFoundException {

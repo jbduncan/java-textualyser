@@ -2,7 +2,7 @@
  * GUITest.java
  */
 
-package uk.ac.surrey.com1028.jb00359.textAnalyser;
+package uk.ac.bluettduncanj;
 
 import static org.junit.Assert.*;
 
@@ -35,7 +35,7 @@ public class GUITest {
   }
 
   /**
-   * Test method for {@link uk.ac.surrey.com1028.jb00359.textAnalyser.GUI#GUI()}.
+   * Test method for {@link uk.ac.bluettduncanj.GUI#GUI()}.
    */
   @Test
   public void testGUI() {

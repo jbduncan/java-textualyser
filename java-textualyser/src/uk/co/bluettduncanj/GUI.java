@@ -24,9 +24,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import java.awt.Font;
 
 /**
@@ -61,6 +64,7 @@ public class GUI {
    * to the GUI.
    */
   private void callFileAnalysis() {
+    
     // Pass user-defined options to the FileAnalyser
     boolean[] options = new boolean[3];
     options[0] = this.chbxAvgLens.isSelected();
@@ -75,18 +79,17 @@ public class GUI {
     try {
       this.fileAnalyser.process();
       this.txtAreaStatsOutput.setText(this.fileAnalyser.toString());
+      
       // Only save the analysis results to a log file if the user requested it
-      if (this.chbxSaveLogFile.isSelected()) {
-        this.fileAnalyser.saveLog();
-      }
+      if (this.chbxSaveLogFile.isSelected()) this.fileAnalyser.saveLog();
     }
-    /* 
-     * If the user has not yet chosen a file, the exception will be caught and
-     * the user will be asked to choose a file.
-     */
+    
+    // If the user has not yet chosen a file, the exception will be caught and
+    // the user will be asked to choose a file.
     catch (NullStringException e) {
       String message = "Please select a text file by clicking 'Choose'.";
       JOptionPane.showMessageDialog(this.frmMainWindow, message, "No file selected", JOptionPane.PLAIN_MESSAGE);
+      
       // Developer error message
       System.out.println(e.toString());
     }
@@ -102,21 +105,26 @@ public class GUI {
    * It pops up a JChooser file dialog to allow the user to select a text file for analysis.
    */
   private void chooseFile() {
-    // Initialise and set default options for a Java file dialog object (a JChooser).
+    
+    // Initialise and set default options for a Java file dialog object (a JChooser)
     JFileChooser chooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt", "text");
     chooser.setFileFilter(filter);
     chooser.setDialogTitle("Choose a file to analyse");
-    // Show the dialog.
+    
+    // Show the dialog
     int returnVal = chooser.showOpenDialog(this.frmMainWindow);
-    // If the user chose a file, identify it and get/set the needed information.
+    
+    // If the user chose a file, identify it and get/set the needed information
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
+      
       // Get and set the file's name and directory and set in the appropriate fields of the fileAnalyser.
       String fileName = file.getName();
       String fileDir = file.getParent();
       this.fileAnalyser.setFileDirectory(fileDir);
       this.fileAnalyser.setFileName(fileName);
+      
       // Set the 'Choose file' text box to the file's absolute path.
       this.txtChooseFile.setText(fileDir + File.separator + fileName);
     }
@@ -126,6 +134,24 @@ public class GUI {
    * Initialise the contents of the main window frame.
    */
   private void initialize() {
+    try {
+      // Set the native system Look and Feel
+      UIManager.setLookAndFeel(
+          UIManager.getSystemLookAndFeelClassName());
+    } 
+    catch (UnsupportedLookAndFeelException e) {
+      // Do nothing - let the Look and Feel gracefully fall back to default
+    }
+    catch (ClassNotFoundException e) {
+      // Do nothing - let the Look and Feel gracefully fall back to default
+    }
+    catch (InstantiationException e) {
+      // Do nothing - let the Look and Feel gracefully fall back to default
+    }
+    catch (IllegalAccessException e) {
+      // Do nothing - let the Look and Feel gracefully fall back to default
+    }
+    
     this.frmMainWindow = new JFrame();
     this.frmMainWindow.setTitle("Text Analyser");
     this.frmMainWindow.setResizable(false);
@@ -156,7 +182,10 @@ public class GUI {
 
       @Override
       public void actionPerformed(ActionEvent arg0) {
+        
         // Tell user that analysis is happening with a label indicator.
+        // TODO: Put all this code in a separate thread so the label actually responds!
+        // TODO: Disable btnAnalyse and all other appropriate GUI elements whilst analysis is happening.
         GUI.this.lblAnalyseStatus.setVisible(true);
 
         GUI.this.callFileAnalysis();

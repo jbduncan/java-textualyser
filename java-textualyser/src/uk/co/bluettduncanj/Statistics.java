@@ -27,7 +27,7 @@ public class Statistics {
   /** An easy-to-use constant reference to the operating system's default line terminator string */
   private static final String newline = System.getProperty("line.separator");
   
-  /** 
+  /**
    * Compiled version of a whitespace regular expression - Makes multiples uses of this regex faster.
    * 
    * [\\p{Z}\\s] is a Java regular expression that finds all ASCII and Unicode whitespace characters.

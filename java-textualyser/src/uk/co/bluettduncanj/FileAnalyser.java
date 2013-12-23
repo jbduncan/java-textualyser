@@ -85,19 +85,19 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   }
   
   /**
-   * Setter of various options and other String arguments that will be used to customise file analysis.
+   * <p>Setter of various options and other String arguments that will be used to customise file analysis.</p>
    * 
-   * For this implementation of the IFileAnalyser interface, it is required that the first index [0] of args is a String 
+   * <p>For this implementation of the IFileAnalyser interface, it is required that the first index [0] of args is a String 
    * that either contains a text pattern or is null. If the third index [2] of options is equal to true, this text pattern 
    * will be used to find the number of times it appears in the text file set by setFileName(String) and 
-   * setFileDirectory(String).
+   * setFileDirectory(String).</p>
    * 
-   * It is also required that options is a boolean array with exactly three (3) indexes. 
+   * <p>It is also required that options is a boolean array with exactly three (3) indexes. 
    * The first index [0] should be an option that determines whether the category of statistics called
    * 'Average Lengths' will be calculated. The second index [1] should be an option that determines whether the category
    * of statistics called 'Frequencies' will be calculated. The third index [2] should be an option that determines whether
    * the number of times that the String pattern (args[0]) appears in the text file will be calculated. The category 
-   * shorthand name of this statistic is 'Text Occurrences'.
+   * shorthand name of this statistic is 'Text Occurrences'.</p>
    * 
    * @param options: The three-element size boolean array of options that determines custom analysis output.
    * @param args: String arguments that should contain a text pattern in its first index.
@@ -113,14 +113,13 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
       throw new IllegalArgumentException("The number of options is invalid.");
     }
     
-    String pattern = args[0];
-    
     if (options[2] == true && pattern == null) {
       throw new IllegalArgumentException("The option to analyse 'Text Occurrences' is true, but the given text pattern is null.");
     }
     
     this.options = options;
-    this.pattern = pattern;
+    // Extract the pattern
+    this.pattern = args[0];
   }
   
   /**
@@ -177,8 +176,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     // Use a list of Characters for easy adding.
     List<Character> charsList = new ArrayList<Character>();
     BufferedReader read;
-    String filePath = this.getFileDirectory() + File.separator + this.getFileName();
-    File file = new File(filePath);
+    File file = new File(this.getFilePath());
     int value = 0;
     try {
       read = new BufferedReader(new FileReader(file));
@@ -317,8 +315,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     // Use a list of Characters temporarily for easy adding.
     List<Character> charsList = new ArrayList<Character>();
     BufferedReader read;
-    String filePath = this.getFileDirectory() + File.separator + this.getFileName();
-    File file = new File(filePath);
+    File file = new File(this.getFilePath());
     int value = 0;
     try {
       read = new BufferedReader(new FileReader(file));
@@ -428,9 +425,8 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    */
   private void parseChars() {
     
-    // Create a file reference to the user-selected file...
-    String filePath = this.getFileDirectory() + File.separator + this.getFileName();
-    File file = new File(filePath);
+    // Create a reference to the user-selected file
+    File file = new File(this.getFilePath());
     
     // Initialise the line terminator counter
     this.noOfLineTerminators = 0;

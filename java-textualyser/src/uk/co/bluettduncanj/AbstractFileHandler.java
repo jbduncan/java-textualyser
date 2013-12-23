@@ -4,6 +4,8 @@
 
 package uk.co.bluettduncanj;
 
+import java.io.File;
+
 
 /**
  * AbstractFileHandler is an abstract class that holds data about file system pathnames. 
@@ -44,6 +46,15 @@ public abstract class AbstractFileHandler {
    */
   public void setFileDirectory(String fileDir) {
     this.fileDir = fileDir;
+  }
+  
+  /**
+   * Super getter of the absolute (full) file path for children of AbstractFileHandler.
+   * 
+   * @return the absolute file path of the file associated with this AbstractFileHandler.
+   */
+  public String getFilePath() {
+    return this.fileDir + File.separator + this.fileName;
   }
    
   /**

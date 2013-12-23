@@ -143,13 +143,13 @@ public class GUI {
       // Do nothing - let the Look and Feel gracefully fall back to default
     }
     catch (ClassNotFoundException e) {
-      // Do nothing - let the Look and Feel gracefully fall back to default
+      // ...
     }
     catch (InstantiationException e) {
-      // Do nothing - let the Look and Feel gracefully fall back to default
+      // ...
     }
     catch (IllegalAccessException e) {
-      // Do nothing - let the Look and Feel gracefully fall back to default
+      // ...
     }
     
     this.frmMainWindow = new JFrame();

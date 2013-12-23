@@ -47,10 +47,7 @@ public class LogFileHandler extends AbstractFileHandler {
    * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter).
    */
   public void save() throws FileNotFoundException {
-    
-    // Get the file path
-    String filePath = this.getFileDirectory() + File.separator + this.getFileName();
-    PrintWriter write = new PrintWriter(filePath);
+    PrintWriter write = new PrintWriter(this.getFilePath());
     
     // Print the log string to the file
     write.print(this.logString);

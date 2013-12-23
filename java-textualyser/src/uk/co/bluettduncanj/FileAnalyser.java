@@ -67,8 +67,6 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     this.setFileDirectory(null);
     this.setFileName(null);
     this.stats = new Statistics();
-    //this.sentences = new ArrayList<String>();
-    //this.words = new ArrayList<String>();
     this.sentences = null;
     this.words = null;
     this.characters = null;
@@ -82,37 +80,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @return The Singleton instance of FileAnalyser.
    */
   public static synchronized FileAnalyser getInstance() {
-    if (instance == null) {
-      instance = new FileAnalyser();
-    }
+    if (instance == null) instance = new FileAnalyser();
     return instance;
   }
-  
-  /**
-   * Setter of the name of the file which the FileAnalyser will call analysis upon.
-   * 
-   * @param fileName: The name of the file to set.
-   *
-   * @see uk.ac.surrey.com1028.jb00359.textAnalyser.AbstractFileHandler#setFileName(java.lang.String)
-   */
-  /**
-  public void setFileName(String fileName) {
-    super.setFileName(fileName);
-  }
-  */
-  
-  /**
-   * Setter of the directory (absolute path) of the file which the FileAnalyser will call analysis upon.
-   * 
-   * @param fileName: The directory of the file to set.
-   *
-   * @see uk.ac.surrey.com1028.jb00359.textAnalyser.AbstractFileHandler#setFileName(java.lang.String)
-   */
-  /**
-  public void setFileDirectory(String fileDir) {
-    super.setFileDirectory(fileDir);
-  }
-  */
   
   /**
    * Setter of various options and other String arguments that will be used to customise file analysis.
@@ -197,14 +167,14 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * and stores it in this.sentences.
    */
   private void parseSentences() {
+    
     // Reset the sentences data structure
     this.sentences = new ArrayList<String>();
-    /* 
-     * Get a fresh batch of character text from the text file.
-     * This allows us to properly deal with line terminator characters (which are considered whitespace).
-     * This time, read in each character at a time, rather than line-after-line.
-     * Use a list of Characters for easy adding.
-     */
+    
+    // Get a fresh batch of character text from the text file.
+    // This allows us to properly deal with line terminator characters (which are considered whitespace).
+    // This time, read in each character at a time, rather than line-after-line.
+    // Use a list of Characters for easy adding.
     List<Character> charsList = new ArrayList<Character>();
     BufferedReader read;
     String filePath = this.getFileDirectory() + File.separator + this.getFileName();
@@ -212,52 +182,44 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     int value = 0;
     try {
       read = new BufferedReader(new FileReader(file));
+      
       // A flag that listens for '\r' carriage returns to allow Windows line terminators (LT) '\r\n' to be recognised
       boolean possibleWindowsLT = false;
       while ((value = read.read()) != -1) {
         char c = (char) value;
-        /* 
-         * For some inexplicable reason, unexpected behaviour occurs when a line terminator-related character is added to
-         * the list of characters and gets analysed by the parser algorithm below this TRY-CATCH block.
-         * Therefore, we replace line terminators with spaces, which appear to solve the problem.
-         */
-        /* 
-         * If the previous char was a carriage return '\r', and the current char is a line feed '\n', add ONE
-         * space to represent these two line terminators (because "\r\n" is a SINGLE Windows line terminator).
-         */
+        
+        // For some inexplicable reason, unexpected behaviour occurs when a line terminator-related character is added to
+        // the list of characters and gets analysed by the parser algorithm below this TRY-CATCH block.
+        // Therefore, we replace line terminators with spaces, which appear to solve the problem.
+        // 
+        // If the previous char was a carriage return '\r', and the current char is a line feed '\n', add ONE
+        // space to represent these two line terminators (because "\r\n" is a SINGLE Windows line terminator).
         if (possibleWindowsLT == true && c == '\n') {
           charsList.add(' ');
           possibleWindowsLT = false;
         }
         else if (possibleWindowsLT == true && c == '\r') {
-          /* 
-           * Then both the previous and current chars are old Mac OSX style line terminators. 
-           * 'Add' them both as spaces to the chars list.
-           */
+          
+          // Then both the previous and current chars are old Mac OS X-style line terminators. 
+          // 'Add' them both as spaces to the chars list.
           charsList.add(' ');
           charsList.add(' ');
           possibleWindowsLT = false;
         }
         else if (possibleWindowsLT == true && c != '\n') {
-          /* 
-           * Then it turns out the previous carriage return was not part of a Windows line terminator.
-           * The previous char was in fact an old Mac OSX way of line terminating, so 'add' it to the characters list as a space
-           * before adding the current character, which we've determined is NOT a line terminator.
-           */
+          
+          // Then it turns out the previous carriage return was not part of a Windows line terminator.
+          // The previous char was in fact an old Mac OSX way of line terminating, so 'add' it to the characters list as a space
+          // before adding the current character, which we've determined is NOT a line terminator.
           charsList.add(' ');
           charsList.add(c);
           possibleWindowsLT = false;
         }
-        else if (c == '\n') {
-          charsList.add(' ');
-        }
-        else if (c == '\r') {
-          // Listen for a Windows line terminator string
+        else if (c == '\n') charsList.add(' ');
+        else if (c == '\r') { // Listen for a Windows line terminator string
           possibleWindowsLT = true;
         }
-        else {
-          charsList.add(c);
-        }
+        else charsList.add(c);
       }
     }
     catch (IOException e) {
@@ -273,38 +235,38 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     
     // We can only parse sentences if we have characters to begin with
     if (chars.length > 0) {
+      
       // Keep track of a counter through all of the parsed characters
       int charIndex = 0;
+      
       // Reference to current sentence being constructed
       String currentSentence = null;
-      /* 
-       * Use an enum class called SentenceParseState to simulate some of the states in the state machine diagram
-       * jb00359_sentenceParseStateDiagram.state.violet.
-       * 
-       * Initialise to the state for listening for the start of a new sentence.
-       */
+      
+      // Use an enum class called SentenceParseState to simulate various states in the parser algorithm.
+      //
+      // Initialise to the state for listening for the start of a new sentence.
       SentenceParseState state = SentenceParseState.LISTEN_FOR_NEW_SENTENCE;
+      
       // Look through each character
       while (charIndex < chars.length) {
+        
         // Create an easy-to-use reference to the current character
         char c = chars[charIndex];
+        
         // Make decisions based on the current state
         switch (state) {
           case LISTEN_FOR_NEW_SENTENCE:
-            
-            /* 
-             * If the current char is neither a whitespace nor a full stop, make it the start of the next sentence and
-             * change the state so we start reading and adding more characters to it.
-             */
+             
+            // If the current char is neither a whitespace nor a full stop, then make it the start of the next sentence and
+            // change the state so we start reading and adding more characters to it.
             if (!Statistics.isWhitespace(c) && c != '.') {
               currentSentence = Character.toString(c);
               state = SentenceParseState.READ_AND_STORE_CHARS;
             }
-            /* 
-             * If we are at the final character out of all characters parsed from the text file
-             * (i.e. we've reached the end of the WHILE loop), 
-             * then we need to add the current sentence as it is to the sentences list.
-             */
+ 
+            // If we are at the final character out of all characters parsed from the text file
+            // (i.e. we've reached the end of the WHILE loop), 
+            // then we need to add the current sentence as it is to the sentences list.
             if (charIndex == chars.length - 1 && currentSentence != null) {
               this.sentences.add(currentSentence);
             }
@@ -314,25 +276,24 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
           
             // Add the current char onto the current sentence
             currentSentence += Character.toString(c);
-            /* 
-             * If the current char is a full stop, or if we are at the final character (i.e. end of WHILE loop), then
-             * our current sentence is complete. Therefore, we need to save it to the sentences list.
-             */
+            
+            // If the current char is a full stop, or if we are at the final character (i.e. end of WHILE loop), then
+            // our current sentence is complete. Therefore, we need to save it to the sentences list.
             if (c == '.' || charIndex == chars.length - 1) {
               this.sentences.add(currentSentence);
               currentSentence = null;
             }
-            /*
-             * If the current char is a full stop but we still have characters left to look through, change the state to 
-             * start listening for the start of another sentence. 
-             */
+
+            // If the current char is a full stop but we still have characters left to look through, change the state to 
+            // start listening for the start of another sentence. 
             if (c == '.' && charIndex < chars.length - 1) {
               state = SentenceParseState.LISTEN_FOR_NEW_SENTENCE;
             }
             
           break;
         } 
-        // Increment the counter to the next character.
+        
+        // Increment the counter to the next character
         charIndex++;
       }
     }
@@ -343,20 +304,17 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * and stores it in this.words.
    */
   private void parseWords() {
+    
     // Reset the contents of the words data structure
     this.words = new ArrayList<String>();
-    /* 
-     * This is a compiled regular expression. It matches 'punctuation' marks as defined by requirement S5 in the 
-     * revised requirements list document.
-     */
-    final Pattern punctuationCompiled = Pattern.compile("[!?/:;,.]");
     
-    /* 
-     * Get a fresh batch of character text from the text file.
-     * This allows us to properly deal with line terminator characters (which are considered whitespace).
-     * This time, read in each character at a time, rather than line-after-line.
-     * Use a list of Characters temporarily for easy adding.
-     */
+    // A compiled regular expression designed to match 'punctuation' marks
+    final Pattern punctuationCompiled = Pattern.compile("[!?/:;,.]");
+     
+    // Get a fresh batch of character text from the text file.
+    // This allows us to properly deal with line terminator characters (which are considered whitespace).
+    // This time, read in each character at a time, rather than line-after-line.
+    // Use a list of Characters temporarily for easy adding.
     List<Character> charsList = new ArrayList<Character>();
     BufferedReader read;
     String filePath = this.getFileDirectory() + File.separator + this.getFileName();
@@ -366,11 +324,10 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
       read = new BufferedReader(new FileReader(file));
       while ((value = read.read()) != -1) {
         char c = (char) value;
-        /* 
-         * For some inexplicable reason, unexpected behaviour occurs when a line terminator-related character is added to
-         * the list of characters and gets analysed by the parser algorithm below this TRY-CATCH block.
-         * Therefore, we replace line terminators with spaces, which appear to solve the problem.
-         */
+        
+        // For some inexplicable reason, unexpected behaviour occurs when a line terminator-related character is added to
+        // the list of characters and gets analysed by the parser algorithm below this TRY-CATCH block.
+        // Therefore, we replace line terminators with spaces, which appear to solve the problem.
         if (c == '\n' || c == '\r') {
           charsList.add(' ');
         }
@@ -392,39 +349,39 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     
     // We can only parse words if we have characters to begin with
     if (chars.length > 0) {
+      
       // Keep track of a counter through all of the parsed characters
       int charIndex = 0;
+      
       // Reference to current word being constructed
-      String currentWord = null;
-      /* 
-       * Use an enum class called WordParseState to simulate the states in the state machine diagram
-       * jb00359_sentenceParseStateDiagram.state.violet.
-       * 
-       * Initialise to the state of listening for the start of a new word.
-       */
+      String currentWord = null; 
+      
+      // Use an enum class called WordParseState to simulate various states in the parser algorithm.
+      // 
+      // Initialise to the state of listening for the start of a new word.
       WordParseState state = WordParseState.LISTEN_FOR_NEW_WORD;
+      
       // Look through each character
       while (charIndex < chars.length) {
-        // Create an easy-to-use reference to the current character
+        
+        // Create easy-to-use references to the current character
         char c = chars[charIndex];
         String cString = Character.toString(c);
+        
         // Make decisions based on the current state
         switch (state) {
           case LISTEN_FOR_NEW_WORD:
             
-            /*
-             * If the current char is neither a whitespace nor a punctuation mark, make it the start of the next word and
-             * change the state so that we start reading and adding more characters to it.
-             */
+            // If the current char is neither a whitespace nor a punctuation mark, make it the start of the next word and
+            // change the state so that we start reading and adding more characters to it.
             if (!Statistics.isWhitespace(c) && !punctuationCompiled.matcher(cString).matches()) {
               currentWord = cString;
               state = WordParseState.READ_AND_STORE_CHARS;
             }
-            /* 
-             * If we are at the final character out of all characters parsed from the text file
-             * (i.e. we've reached the end of the WHILE loop), 
-             * then we need to add the current word as it is to the words list.
-             */
+
+            // If we are at the final character out of all characters parsed from the text file
+            // (i.e. we've reached the end of the WHILE loop), 
+            // then we need to add the current word as it is to the words list.
             if (charIndex == chars.length - 1 && currentWord != null) {
               this.words.add(currentWord);
             }
@@ -432,29 +389,25 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
           break;
           case READ_AND_STORE_CHARS:
             
-            // Add the current char onto the current word
-            //currentWord += cString;
-            /* 
-             * If the current char is a whitespace or punctuation character, or if we are at the final character 
-             * (i.e. end of WHILE loop), then our current word is complete. 
-             * Therefore, we need to save it to the words list.
-             */
+            // Add the current char onto the current word.
+            
+            // If the current char is a whitespace or punctuation character, or if we are at the final character 
+            // (i.e. end of WHILE loop), then our current word is complete. 
+            // Therefore, we need to save it to the words list.
             if ((Statistics.isWhitespace(c) || punctuationCompiled.matcher(cString).matches()) || 
                 charIndex == chars.length - 1) {
               this.words.add(currentWord);
               currentWord = null;
             }
             else {
-              /* 
-               * If the current char is NOT a whitespace or punctuation mark, then it is part of the current word.
-               * Therefore add the current char onto the current word.
-               */
+              
+              // If the current char is NOT a whitespace or punctuation mark, then it is part of the current word.
+              // Therefore add the current char onto the current word.
               currentWord += cString;
             }
-            /*
-             * If the current char is a whitespace or punctuation char, but we still have characters left to look through, 
-             * then change the state to start listening for the start of another word. 
-             */
+            
+            // If the current char is a whitespace or punctuation char, but we still have characters left to look through, 
+            // then change the state to start listening for the start of another word. 
             if ((Statistics.isWhitespace(c) || punctuationCompiled.matcher(cString).matches())
                 && charIndex < chars.length - 1) {
               state = WordParseState.LISTEN_FOR_NEW_WORD;
@@ -462,12 +415,11 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
             
           break;
         }
+        
         // Increment the counter to the next character.
         charIndex++;
       }
     }
-    
-    
   }
 
   /**
@@ -475,28 +427,30 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * stores it in this.characters.
    */
   private void parseChars() {
+    
     // Create a file reference to the user-selected file...
     String filePath = this.getFileDirectory() + File.separator + this.getFileName();
     File file = new File(filePath);
+    
     // Initialise the line terminator counter
     this.noOfLineTerminators = 0;
+    
     // Use a List<Character> for easy adding of char elements
     List<Character> tokens = new ArrayList<Character>();
     BufferedReader read;
+    
     // Attempt to read the file
     try {
       read = new BufferedReader(new FileReader(file));
       String line;
+      
       // Add the character contents of each line to the character tokens
       while ((line = read.readLine()) != null) {
-        for (char c : line.toCharArray()) {
-          tokens.add(c);
-        }
-        /*
-         * Note: I want line terminators to count as whitespaces. Therefore I keep a counter that counts the number of lines,
-         * and therefore the number of line terminators, which will be stored in a class field for later use
-         * by Statistics.calcNoOfWhitespaces(char[], int).
-         */
+        for (char c : line.toCharArray()) tokens.add(c);
+        
+        // Note: I want line terminators to count as whitespaces. Therefore I keep a counter that counts the number of lines,
+        // and therefore the number of line terminators, which will be stored in a class field for later use
+        // by Statistics.calcNoOfWhitespaces(char[], int).
         this.noOfLineTerminators++;
       }  
     }
@@ -519,11 +473,8 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    */
   private char[] toCharArray(List<Character> chars) {
     StringBuilder s = new StringBuilder(chars.size());
-    for (Character c : chars) {
-      s.append(c);
-    }
-    char[] result = s.toString().toCharArray();
-    return result;
+    for (Character c : chars) s.append(c);
+    return s.toString().toCharArray();
   }
 
   /**
@@ -533,11 +484,13 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * This method is dependent on the outcome of parse(). Therefore parse() needs to be called first.
    */
   private void analyse() {
+    
     // Choose whether to analyse 'Average Lengths' statistics (see Javadoc for setOptions(...))
     if (options[0] == true) {
       this.stats.calcAvgSentenceLen(this.sentences);
       this.stats.calcAvgWordLen(this.words);
     }
+    
     // Choose whether to analyse 'Frequencies' statistics (see Javadoc for setOptions(...))
     if (options[1] == true) {
       this.stats.calcCharFreq(this.characters);
@@ -547,10 +500,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
       this.stats.calcNoOfIntlChars(this.characters);
       this.stats.calcNoOfSuffixes(this.words);
     }
+    
     // Choose whether to analyse the 'Text Occurrences' statistic (see Javadoc for setOptions(...))
-    if (options[2] == true) {
-      this.stats.calcNoOfTextOCs(this.characters, this.pattern.toCharArray());
-    }
+    if (options[2] == true) this.stats.calcNoOfTextOCs(this.characters, this.pattern.toCharArray());
   }
 
   /**
@@ -628,15 +580,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   /*
   public String datStructPrint() {
     String result = "";
-    for (char c : this.characters) {
-      result += c + "\n";
-    }
-    for (String w : this.words) {
-      result += w + "\n";
-    }
-    for (String s : this.sentences) {
-      result += s + "\n";
-    }
+    for (char c : this.characters)  result += c + "\n";
+    for (String w : this.words)     result += w + "\n";
+    for (String s : this.sentences) result += s + "\n";
     return result;
   }
   */

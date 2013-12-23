@@ -51,28 +51,30 @@ public class BoyerMoore {
    * @return the number of matches between the pattern and the text.
    */
   public int search(char[] text) {
-      // Counter for number of matches between text and pattern
-      int matchesFound = 0;
-      int M = pattern.length;
-      int N = text.length;
-      int skip;
-      for (int i = 0; i <= N - M; i += skip) {
-          skip = 0;
-          for (int j = M-1; j >= 0; j--) {
-              if (pattern[j] != text[i+j]) {
-                  // Bad character rule skip
-                  skip = Math.max(1, j - badCharTable[text[i+j]]);
-                  break;
-              }
-          }
-          if (skip == 0) {
-            // Match found!
-            matchesFound++;
-            i++;
-          }
+      
+    // Counter for number of matches between text and pattern
+    int matchesFound = 0;
+    int M = pattern.length;
+    int N = text.length;
+    int skip;
+    for (int i = 0; i <= N - M; i += skip) {
+      skip = 0;
+      for (int j = M-1; j >= 0; j--) {
+        if (pattern[j] != text[i+j]) {        
+          // Bad character rule skip
+          skip = Math.max(1, j - badCharTable[text[i+j]]);
+          break;
+        }
       }
-      // Searching done
-      return matchesFound;                 
+      if (skip == 0) { 
+        // Match found!
+        matchesFound++;
+        i++;
+      }
+    }
+      
+    // Searching done
+    return matchesFound;                 
   }
   
   /**

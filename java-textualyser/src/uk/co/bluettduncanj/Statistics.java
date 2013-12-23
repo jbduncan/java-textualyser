@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class Statistics {
   
-  /** An easy-to-use constant reference to the operating system's default line terminator character/string */
+  /** An easy-to-use constant reference to the operating system's default line terminator string */
   private static final String newline = System.getProperty("line.separator");
   
   /** 
@@ -34,7 +34,7 @@ public class Statistics {
    *
    * \s is a standard regex expression for any ASCII whitespace.
    *
-   * According to page 120 of the first source below, \p{Z} is a Unicode property that can be used
+   * According to page 120 of the source (1) below, \p{Z} is a Unicode property that can be used
    * by Unicode-compliant regex parsers to catch the 'Separator' quality of Unicode characters that are meant to separate
    * things but have no visual representation.
    *
@@ -128,24 +128,26 @@ public class Statistics {
    * @param characters: The list of characters to analyse.
    */
   public void calcCharFreq(char[] characters) {
+    
     // Use a Map implementation that will keep Character keys in order
     this.charFreq = new TreeMap<Character, Double>();
     int size = characters.length; // Keep track of size of characters
     double charCount = 0.0; // Keep track of the number of times a particular character appears in characters
     for (char c : characters) {
+      
       // Identify new unique characters
       if (!this.charFreq.containsKey(c)) {
+        
         // Find number of times c appears in characters
         charCount = 0.0;
-        for (char charToCompare : characters) {
-          if (c == charToCompare) { // Then we have found an occurrence of c in characters; increment a counter
+        for (char charToCompare : characters)
+          if (c == charToCompare) // Then we have found an occurrence of c in characters; increment a counter
             charCount++;
-          }
-        }
         
         // Calculate frequency out of 100(%), to 2 decimal places
         double freq = (charCount / size) * 100.0;
-        // Store character with its frequency as a key and value respectively in this.charFreq for later use
+        
+        // Store character with its frequency as a respective key and value pair in this.charFreq for later use
         this.charFreq.put(c, freq);
       }
     }  
@@ -158,9 +160,7 @@ public class Statistics {
    */
   public void calcAvgSentenceLen(List<String> sentences) {
     double total = 0.0;
-    for (String sentence : sentences) {
-      total += sentence.length();
-    }
+    for (String sentence : sentences) total += sentence.length();
     this.avgSentenceLen = total / sentences.size();
   }
   
@@ -171,10 +171,7 @@ public class Statistics {
    */
   public void calcAvgWordLen(List<String> words) {
     double total = 0.0;
-    for (String word : words) {
-      total += word.length();
-    }
-    
+    for (String word : words) total += word.length();
     this.avgWordLen = total / words.size();
   }
   
@@ -187,13 +184,7 @@ public class Statistics {
    */
   public void calcNoOfEnglishANs(char[] characters) {
     int count = 0;
-    for (char c : characters) {
-      // Check that c matches the regular expression englishAN
-      if (this.isEnglishAN(c)) {
-        // c and the regex have matched! We have therefore found an English alphanumeric character, so record this through count.
-        count++;
-      }
-    }
+    for (char c : characters) if (this.isEnglishAN(c)) count++;
     this.noOfEnglishANs = count;
   }
   
@@ -219,11 +210,7 @@ public class Statistics {
    */
   public void calcNoOfNonANs(char[] characters) {
     int count = 0;
-    for (char c : characters) {
-      if (this.isNonAN(c)) {
-        count++;
-      }
-    }
+    for (char c : characters) if (this.isNonAN(c)) count++;
     this.noOfNonANs = count;
   }
   
@@ -251,11 +238,7 @@ public class Statistics {
    */
   public void calcNoOfWhitespaces(char[] characters, int noOfLineTerminators) {
     int count = noOfLineTerminators;
-    for (char c : characters) {
-      if (Statistics.isWhitespace(c)) {
-        count++;
-      }
-    }
+    for (char c : characters) if (Statistics.isWhitespace(c)) count++;
     this.noOfWhitespaces = count;
   }
   
@@ -281,11 +264,7 @@ public class Statistics {
    */
   public void calcNoOfIntlChars(char[] characters) {
     int count = 0;
-    for (char c : characters) {
-      if (this.isIntl(c)) {
-        count++;
-      }
-    }
+    for (char c : characters) if (this.isIntl(c)) count++;
     this.noOfIntlChars = count;
   }
   
@@ -308,11 +287,9 @@ public class Statistics {
    */
   public void calcNoOfSuffixes(List<String> words) {
     int count = 0;
-    for (String w : words) {
-      if (w.endsWith("ed") || w.endsWith("ing") || w.endsWith("ly")) {
+    for (String w : words)
+      if (w.endsWith("ed") || w.endsWith("ing") || w.endsWith("ly"))
         count++;
-      }
-    }
     this.noOfSuffixes = count;
   }
 
@@ -328,14 +305,13 @@ public class Statistics {
    * @param pattern: The group of character text to find in the body.
    */
   public void calcNoOfTextOCs(char[] body, char[] pattern) {
+    
     // Store the pattern as a class field for later referral by toString()
     StringBuilder s = new StringBuilder(pattern.length);
-    for (Character c : pattern) {
-      s.append(c);
-    }
+    for (Character c : pattern) s.append(c);
     this.pattern = s.toString();
 
-    // Search for the
+    // Search for the number of matches of the pattern against the body
     BoyerMoore bm = new BoyerMoore(pattern, 256);
     this.noOfTextOCs = bm.search(body);
   }
@@ -352,10 +328,8 @@ public class Statistics {
   public String toString() {
     String output = "";
     
-    /*
-     * Only return a non-null String if any analysis has actually happened, i.e. if any of the corresponding results
-     * class fields no longer contain their default values.
-     */
+    // Only return a non-null String if any analysis has actually happened, i.e. if any of the corresponding results
+    // class fields no longer contain their default values.
     if (this.charFreq != null || this.avgSentenceLen != -1.0 || this.avgWordLen != -1.0 || 
         this.noOfEnglishANs != -1 || this.noOfNonANs != -1 || this.noOfWhitespaces != -1 ||
         this.noOfIntlChars != -1 || this.noOfSuffixes != -1 || this.noOfTextOCs != -1) {
@@ -369,10 +343,8 @@ public class Statistics {
       // Another section of the output String will contain stats about Frequencies....
       output += this.frequenciesToString();
       
-      /*
-       * Yet another section of the output String will contain a statistic about the number of times
-       * a user-defined pattern string appears in the text file (where this stat is called Text Occurrences)...
-       */
+      // Yet another section of the output String will contain a statistic about the number of times
+      // a user-defined pattern string appears in the text file (where this stat is called Text Occurrences)...
       output += this.textOCsToString();
     }
     
@@ -393,6 +365,7 @@ public class Statistics {
     String date = timeFormat.format(now);
     SimpleDateFormat timeZoneFormat = new SimpleDateFormat("z");
     String timeZone = timeZoneFormat.format(now);
+    
     output += 
         time + ", " +
         date + " " +
@@ -407,15 +380,19 @@ public class Statistics {
    */
   private String avgLensToString() {
     String output = "";
+    
     // Execute this method only if any of the related calculation methods were called e.g. calcAvgSentenceLen(List<String>).
     if (this.avgSentenceLen != -1 || this.avgWordLen != -1) {
+      
       // Add the category of stats to do with Average Lengths.
       output += newline + "=== Average Lengths ===" + newline;
       if (this.isAnalysed(this.avgSentenceLen)) {
+        
         // Add the result from calcAvgSentenceLen(...) to the output string in a readable form
         output += "Average sentence length: " + this.to2DecimalPlaces(this.avgSentenceLen) + newline;
       }
       if (this.isAnalysed(this.avgWordLen)) {
+        
         // Add the result from calcAvgWordLen(...) to the output string in a readable form
         output += "Average word length: " + this.to2DecimalPlaces(this.avgWordLen) + newline;
       }
@@ -429,64 +406,69 @@ public class Statistics {
    * @return a sub-string containing a human-readable form of the 'Frequencies' statistics.
    */
   private String frequenciesToString() {
-    /*
-     * Execute this method only if any of the related calculation methods were called e.g. calcCharFreq(char[]) or 
-     * calcNoOfIntlChars(char[]).
-     */
+    
+    // Execute this method only if any of the related calculation methods were called e.g. calcCharFreq(char[]) or 
+    // calcNoOfIntlChars(char[]).
     String output = "";
     if (this.charFreq != null || this.noOfEnglishANs != -1 || this.noOfNonANs != -1 || this.noOfIntlChars != -1 ||
         this.noOfWhitespaces != -1 || this.noOfSuffixes != -1) {
+      
       // Add the category of stats to do with frequencies.
       output += newline + "=== Frequencies ===" + newline;
       if (this.charFreq != null) {
+        
         // Add the results from calcCharFreq(...) to the output string in a readable form
         output += "--- Character frequencies (out of 100%) ---" + newline;
-        /*
-         * We want to treat whitespaces differently; remember that whitespaces include a whole range of possible
-         * non-visible characters e.g. spaces and tabs. 
-         *
-         * Therefore we will want keep track of the total percentage frequency of all whitespaces. 
-         * 
-         * We will add the number of whitespaces to the end of the output string
-         * when all the other characters in this.charFreq have been dealt with.
-         */
+        
+        // We want to treat whitespaces differently; whitespaces include a whole range of possible
+        // non-visible characters e.g. spaces and tabs. 
+        //
+        // Therefore we will want keep track of the total percentage frequency of all whitespaces. 
+        // 
+        // We will add the number of whitespaces to the end of the output string
+        // when all the other characters in this.charFreq have been dealt with.
         double totalWhitespaceFreq = 0.0;
         for (Character key : this.charFreq.keySet()) {
-          
           double charFreq = this.charFreq.get(key);
+          
           // Output the frequencies of each non-whitespace character
-          if (!Statistics.isWhitespace(key)) {
+          if (!Statistics.isWhitespace(key))
             output += key + ": " + this.to2DecimalPlaces(charFreq) + "%" + newline;
-          }
+          
           // If we come across a whitespace character, add its frequency to the local record
-          else {
-            totalWhitespaceFreq += charFreq;
-          }
+          else totalWhitespaceFreq += charFreq;
         }
+        
         // Now output the total frequency of whitespace characters
         output += "Whitespaces: " + this.to2DecimalPlaces(totalWhitespaceFreq) + "%" + newline;
       }
       if (this.charFreq != null || this.noOfEnglishANs != -1 || this.noOfNonANs != -1 || this.noOfIntlChars != -1 ||
           this.noOfWhitespaces != -1 || this.noOfSuffixes != -1) {
+        
         // Add the sub-category of stats to do with whole numbers of specific characters/strings e.g. noOfIntlChars
         output += "--- Other numbers ---" + newline;
         if (this.isAnalysed(this.noOfEnglishANs)) {
+          
           // Add the result from calcNoOfEnglishANs(...) to the output string in a readable form
           output += "English alphanumeric characters: " + this.toWholeNumber(this.noOfEnglishANs) + newline;
         }
         if (this.isAnalysed(this.noOfNonANs)) {
+          
           // Add the result from calcNoOfNonANs(...) to the output string in a readable form
           output += "Non-alphanumeric characters: " + this.toWholeNumber(this.noOfNonANs) + newline;
         }
         if (this.isAnalysed(this.noOfWhitespaces)) {
+          
           // Add the result from calcNoOfWhitespaces(...) to the output string in a readable form
           output += "Whitespaces: " + this.toWholeNumber(this.noOfWhitespaces) + newline;
         }
         if (this.isAnalysed(this.noOfIntlChars)) {
+          
           // Add the result from calcNoOfIntlChars(...) to the output string in a readable form
           output += "International/Accented characters: " + this.toWholeNumber(this.noOfIntlChars) + newline;
         }
         if (this.isAnalysed(this.noOfSuffixes)) {
+          
           // Add the result from calcNoOfSuffixes(...) to the output string in a readable form
           output += "No. of suffixes 'ed' 'ing' 'ly': " + this.toWholeNumber(this.noOfSuffixes) + newline;
         }
@@ -502,8 +484,10 @@ public class Statistics {
    */
   private String textOCsToString() {
     String output = "";
+    
     // Execute this method only if calcNoOfTextOCs(...) was called.
     if (this.isAnalysed(this.noOfTextOCs)) {
+      
       // Add the result from calcNoOfTextOCs(...) to the output string in a readable form
       output +=
           newline + "=== Text Occurrences ===" + newline +
@@ -541,7 +525,7 @@ public class Statistics {
   
   /**
    * A private utility method for toString() that converts a double-type number into a String representing the same
-   * number as if it were truncated to a whole number (integer).
+   * number as if it were truncated (floored) to a whole number (integer).
    * 
    * @param number: The number to convert.
    * 

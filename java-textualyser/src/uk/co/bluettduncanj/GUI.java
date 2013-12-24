@@ -280,12 +280,10 @@ public class GUI {
    * 
    * @return true if the state was properly initialised, otherwise false.
    */
-  /*
   public boolean isInitialStateOK() {
     return (this.frmMainWindow != null && this.btnAnalyse != null && this.btnChooseFile != null &&
         this.chbxAvgLens != null && this.chbxFreqs != null && this.chbxSaveLogFile != null &&
         this.chbxTextOCs != null && this.fileAnalyser != null && this.lblAnalyseStatus != null &&
         this.txtAreaStatsOutput != null && this.txtChooseFile != null && this.txtPattern != null);
   }
-  */
 }

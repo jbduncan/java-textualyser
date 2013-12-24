@@ -556,13 +556,11 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * 
    * @return true if the state was properly initialised, otherwise false.
    */
-  /*
   public boolean isInitialStateOK() {
     return (this.stats != null && this.sentences.size() == 0 && this.words.size() == 0 && this.characters == null &&
         this.log == null && this.options == null && this.pattern == null && this.noOfLineTerminators == 0 &&
         this.getFileDirectory() == null && this.getFileName() == null);
   }
-  */
 
   /**
    * This JUnit 4 specific test method should be commented out or made private before building the program for
@@ -573,7 +571,6 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * 
    * @return a String containing the characters, words and sentences in a FileAnalyser object, in that order.
    */
-  /*
   public String datStructPrint() {
     String result = "";
     for (char c : this.characters)  result += c + "\n";
@@ -581,5 +578,4 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     for (String s : this.sentences) result += s + "\n";
     return result;
   }
-  */
 }

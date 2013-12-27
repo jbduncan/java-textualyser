@@ -12,6 +12,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -37,7 +40,7 @@ import java.awt.Font;
  */
 public class GUI {
 
-  private IFileAnalyser fileAnalyser = FileAnalyser.getInstance();
+  //private IFileAnalyser fileAnalyser;
 
   private JFrame        frmMainWindow;
   private JButton       btnChooseFile;
@@ -63,41 +66,106 @@ public class GUI {
    * It calls the necessary IFileAnalyser API methods to analyse the user's chosen text file and output it
    * to the GUI.
    */
-  private void callFileAnalysis() {
+  private synchronized void callFileAnalysis() {
     
-    // Pass user-defined options to the FileAnalyser
-    boolean[] options = new boolean[3];
-    options[0] = this.chbxAvgLens.isSelected();
-    options[1] = this.chbxFreqs.isSelected();
-    options[2] = this.chbxTextOCs.isSelected();
-    
-    String[] pattern = new String[] { this.txtPattern.getText() };
-    
-    this.fileAnalyser.setOptions(options, pattern);
+    SwingWorker<Void, List<Boolean>> worker = new SwingWorker<Void, List<Boolean>>() {
 
-    // Attempt to analyse the file.
-    try {
-      this.fileAnalyser.process();
-      this.txtAreaStatsOutput.setText(this.fileAnalyser.toString());
+      @Override
+      protected Void doInBackground() throws Exception {
+        
+        // Tell user that analysis is happening; publish the appropriate visibility and
+        // enabled status of various GUI elements before analysis.
+        List<Boolean> guiElementChunks = new ArrayList<Boolean>();
+        guiElementChunks.add(true);  // GUI.this.lblAnalyseStatus.setVisible(boolean)
+        guiElementChunks.add(false); // GUI.this.btnAnalyse.setEnabled(boolean)
+        guiElementChunks.add(false); // GUI.this.btnChooseFile.setEnabled(boolean)
+        guiElementChunks.add(false); // GUI.this.chbxAvgLens.setEnabled(boolean)
+        guiElementChunks.add(false); // GUI.this.chbxFreqs.setEnabled(boolean)
+        guiElementChunks.add(false); // GUI.this.chbxSaveLogFile.setEnabled(boolean)
+        guiElementChunks.add(false); // GUI.this.chbxTextOCs.setEnabled(boolean)
+        guiElementChunks.add(false); // GUI.this.txtPattern.setEnabled(boolean)
+        
+        // Publish these booleans...
+        this.publish(guiElementChunks);
+        
+        // Do analysis...
+        
+        // Pass user-defined options to the FileAnalyser
+        boolean[] options = new boolean[3];
+        options[0] = GUI.this.chbxAvgLens.isSelected();
+        options[1] = GUI.this.chbxFreqs.isSelected();
+        options[2] = GUI.this.chbxTextOCs.isSelected();
+        
+        String[] pattern = new String[] { GUI.this.txtPattern.getText() };
+        
+        FileAnalyser.getInstance().setOptions(options, pattern);
+
+        // Attempt to analyse the file.
+        try {
+          FileAnalyser.getInstance().process();
+          GUI.this.txtAreaStatsOutput.setText(FileAnalyser.getInstance().toString());
+          
+          // Only save the analysis results to a log file if the user requested it
+          if (GUI.this.chbxSaveLogFile.isSelected()) FileAnalyser.getInstance().saveLog();
+        }
+        
+        // If the user has not yet chosen a file, the exception will be caught and
+        // the user will be asked to choose a file.
+        catch (NullStringException e) {
+          String message = "Please select a text file by clicking 'Choose'.";
+          JOptionPane.showMessageDialog(GUI.this.frmMainWindow, message, "No file selected", JOptionPane.PLAIN_MESSAGE);
+          
+          // Developer error message
+          e.printStackTrace();
+        }
+        catch (FileNotFoundException e) {
+          String message = "Sorry, there was an error creating the log file. Log file creation has been abandoned.";
+          JOptionPane.showMessageDialog(GUI.this.frmMainWindow, message, "Log file error", JOptionPane.ERROR_MESSAGE);
+          
+          // Developer error message
+          e.printStackTrace();
+        }
+        
+        // Analysis finished; publish the GUI's original visibility/enabled statuses...
+        guiElementChunks = new ArrayList<Boolean>();
+        guiElementChunks.add(false);                             // GUI.this.lblAnalyseStatus.setVisible(boolean)
+        guiElementChunks.add(true);                              // GUI.this.btnAnalyse.setEnabled(boolean)
+        guiElementChunks.add(true);                              // GUI.this.btnChooseFile.setEnabled(boolean)
+        guiElementChunks.add(true);                              // GUI.this.chbxAvgLens.setEnabled(boolean)
+        guiElementChunks.add(true);                              // GUI.this.chbxFreqs.setEnabled(boolean)
+        guiElementChunks.add(true);                              // GUI.this.chbxSaveLogFile.setEnabled(boolean)
+        guiElementChunks.add(true);                              // GUI.this.chbxTextOCs.setEnabled(boolean)
+        guiElementChunks.add(GUI.this.chbxTextOCs.isSelected()); // GUI.this.txtPattern.setEnabled(boolean)
+        
+        // Publish...
+        this.publish(guiElementChunks);
+        
+        return null;
+      }
+
+      /**
+       * @param chunks
+       *          The published pieces of data to update the GUI with.
+       *
+       * @see javax.swing.SwingWorker#process(java.util.List)
+       */
+      @Override
+      protected void process(List<List<Boolean>> chunks) {
+        List<Boolean> values = chunks.get(chunks.size() - 1);
+        
+        GUI.this.lblAnalyseStatus.setVisible(values.get(0));
+        GUI.this.btnAnalyse.setEnabled(values.get(1));
+        GUI.this.btnChooseFile.setEnabled(values.get(2));
+        GUI.this.chbxAvgLens.setEnabled(values.get(3));
+        GUI.this.chbxFreqs.setEnabled(values.get(4));
+        GUI.this.chbxSaveLogFile.setEnabled(values.get(5));
+        GUI.this.chbxTextOCs.setEnabled(values.get(6));
+        GUI.this.txtPattern.setEnabled(values.get(7));
+      }
       
-      // Only save the analysis results to a log file if the user requested it
-      if (this.chbxSaveLogFile.isSelected()) this.fileAnalyser.saveLog();
-    }
+    };
     
-    // If the user has not yet chosen a file, the exception will be caught and
-    // the user will be asked to choose a file.
-    catch (NullStringException e) {
-      String message = "Please select a text file by clicking 'Choose'.";
-      JOptionPane.showMessageDialog(this.frmMainWindow, message, "No file selected", JOptionPane.PLAIN_MESSAGE);
-      
-      // Developer error message
-      System.out.println(e.toString());
-    }
-    catch (FileNotFoundException e) {
-      String message = "Sorry, there was an error creating the log file. Log file creation has been abandoned.";
-      JOptionPane.showMessageDialog(this.frmMainWindow, message, "Log file error", JOptionPane.ERROR_MESSAGE);
-      e.printStackTrace();
-    }
+    worker.execute();
   }
 
   /**
@@ -122,8 +190,8 @@ public class GUI {
       // Get and set the file's name and directory and set in the appropriate fields of the fileAnalyser.
       String fileName = file.getName();
       String fileDir = file.getParent();
-      this.fileAnalyser.setFileDirectory(fileDir);
-      this.fileAnalyser.setFileName(fileName);
+      FileAnalyser.getInstance().setFileDirectory(fileDir);
+      FileAnalyser.getInstance().setFileName(fileName);
       
       // Set the 'Choose file' text box to the file's absolute path.
       this.txtChooseFile.setText(fileDir + File.separator + fileName);
@@ -134,6 +202,7 @@ public class GUI {
    * Initialise the contents of the main window frame.
    */
   private void initialize() {
+    
     try {
       // Set the native system Look and Feel
       UIManager.setLookAndFeel(
@@ -182,16 +251,9 @@ public class GUI {
 
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        
-        // Tell user that analysis is happening with a label indicator.
-        // TODO: Put all this code in a separate thread so the label actually responds!
-        // TODO: Disable btnAnalyse and all other appropriate GUI elements whilst analysis is happening.
-        GUI.this.lblAnalyseStatus.setVisible(true);
 
         GUI.this.callFileAnalysis();
-
-        // Analysis finished; turn off label indicator.
-        GUI.this.lblAnalyseStatus.setVisible(false);
+        
       }
     });
     btnAnalyse.setBounds(11, 188, 136, 23);
@@ -283,7 +345,7 @@ public class GUI {
   public boolean isInitialStateOK() {
     return (this.frmMainWindow != null && this.btnAnalyse != null && this.btnChooseFile != null &&
         this.chbxAvgLens != null && this.chbxFreqs != null && this.chbxSaveLogFile != null &&
-        this.chbxTextOCs != null && this.fileAnalyser != null && this.lblAnalyseStatus != null &&
-        this.txtAreaStatsOutput != null && this.txtChooseFile != null && this.txtPattern != null);
+        this.chbxTextOCs != null && this.lblAnalyseStatus != null && this.txtAreaStatsOutput != null && 
+        this.txtChooseFile != null && this.txtPattern != null);
   }
 }

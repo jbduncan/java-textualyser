@@ -146,7 +146,7 @@ public class StatisticsTest {
     stats.reset();
     assertEquals("Statistics object's initial state is not reset", true, stats.isReset());
     // Do an arbitrary calculation that should change the state from 'reset'
-    stats.calcAvgSentenceLen(testSs.get(3));
+    stats.calcAvgSentenceLen(testSs.get(0));
     assertEquals("Statistics object's state is still in reset state!", false, stats.isReset());
   }
 

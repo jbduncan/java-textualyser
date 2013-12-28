@@ -1,11 +1,11 @@
 Java Textualyser
 ================
 
-Java Textualyser is a Java based text analyser that gets simple statistics about the 'style' of prose of text files.
+Java Textualyser is a Java based text analyser that outputs simple statistics about the 'style' of prose of text files.
 
-This project originated as a piece of coursework I did during the first year of my Computer Science degree at the University of Surrey. It has since evolved into something coded more elaborately, which I have been working on for fun in my spare time.
+This project originated as a piece of coursework that I did during my Computer Science degree at the University of Surrey. I have since been working on it for fun in my spare time, and so the code has gradually evolved from it's original form.
 
-This software is by no means a finished project. I am still learning how to best use Java practices to make this program work as intended, so it is by no means guaranteed to be bug-free.
+This is not a mature project. I am still learning how to best use Java practices to improve this program, so it is by no means guaranteed to be bug-free.
 
 License
 ================

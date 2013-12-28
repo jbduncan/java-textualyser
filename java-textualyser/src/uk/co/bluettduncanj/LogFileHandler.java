@@ -4,7 +4,6 @@
 
 package uk.co.bluettduncanj;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -65,9 +64,7 @@ public class LogFileHandler extends AbstractFileHandler {
    * 
    * @return true if the two Strings are equal, otherwise false.
    */
-  /*
   public boolean logStringEquals(String otherLogString) {
     return this.logString.equals(otherLogString);
   }
-  */
 }

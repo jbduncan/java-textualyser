@@ -85,11 +85,9 @@ public class BoyerMoore {
    * 
    * @return the size of the bad character table array.
    */
-  /*
   public int getBadCharTableSize() {
     return this.badCharTable.length;
   }
-  */
   
   /**
    * Unit test method 2.
@@ -101,14 +99,9 @@ public class BoyerMoore {
    * 
    * @return whether the char contents of the pattern passed in at construction time matches those of otherPattern.
    */
-  /*
   public boolean patternEquals(String otherPattern) {
     StringBuilder s = new StringBuilder(this.pattern.length);
-    for (Character c : this.pattern) {
-      s.append(c);
-    }
-    String sPattern = s.toString();
-    return sPattern.equals(otherPattern);
+    for (Character c : this.pattern) s.append(c);
+    return s.toString().equals(otherPattern);
   }
-  */
 }

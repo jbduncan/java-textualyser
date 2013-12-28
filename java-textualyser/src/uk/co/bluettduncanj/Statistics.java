@@ -544,12 +544,10 @@ public class Statistics {
    * 
    * @return true if the state is (re)set to default, otherwise false.
    */
-  /*
   public boolean isReset() {
     return (this.charFreq == null && this.avgSentenceLen == -1.0 && this.avgWordLen == -1.0 &&
         this.noOfEnglishANs == -1 && this.noOfNonANs == -1 && this.noOfWhitespaces == -1 &&
         this.noOfIntlChars == -1 && this.noOfSuffixes == -1 && this.noOfTextOCs == -1 && this.pattern == null);
   }
-  */
   
 }

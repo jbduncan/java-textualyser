@@ -40,8 +40,6 @@ import java.awt.Font;
  */
 public class GUI {
 
-  //private IFileAnalyser fileAnalyser;
-
   private JFrame        frmMainWindow;
   private JButton       btnChooseFile;
   private JTextField    txtChooseFile;
@@ -151,8 +149,11 @@ public class GUI {
        */
       @Override
       protected void process(List<List<Boolean>> chunks) {
+        
+        // Get latest published 'chunk' of values
         List<Boolean> values = chunks.get(chunks.size() - 1);
         
+        // Begin GUI updating
         GUI.this.lblAnalyseStatus.setVisible(values.get(0));
         GUI.this.btnAnalyse.setEnabled(values.get(1));
         GUI.this.btnChooseFile.setEnabled(values.get(2));
@@ -251,9 +252,7 @@ public class GUI {
 
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
         GUI.this.callFileAnalysis();
-        
       }
     });
     btnAnalyse.setBounds(11, 188, 136, 23);

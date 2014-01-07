@@ -80,7 +80,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @return The Singleton instance of FileAnalyser.
    */
   public static synchronized FileAnalyser getInstance() {
-    if (instance == null) instance = new FileAnalyser();
+    if (instance == null) {
+      instance = new FileAnalyser();
+    }
     return instance;
   }
   

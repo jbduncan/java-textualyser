@@ -15,7 +15,7 @@ import java.io.File;
  * It is the responsibility of classes which extend AbstractFileHandler to implement constructors/setters
  * that obtain file system file names and directories (absolute paths).
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public abstract class AbstractFileHandler {
   

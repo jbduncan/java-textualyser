@@ -20,18 +20,12 @@ import javax.swing.JOptionPane;
  * FileAnalyser is a file-handling class that is specifically designed to work as a logical back-end for
  * the Text Analyser program's GUI front-end.
  * 
- * It uses the Singleton GoF (Gang of Four) Design Pattern to ensure only one instance of FileAnalyser is active
- * at any one time.
- * 
  * It takes data obtained from the GUI to find and analyse a text file specified by the user, to search for 
  * various simple patterns (the results of which are known as statistics).
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
-
-  /** Singleton instance of FileAnalyser */
-  private static FileAnalyser instance = null;
   
   /** List of sentences parsed from the text file */
   private List<String> sentences;
@@ -61,9 +55,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   private int noOfLineTerminators;
   
   /**
-   * Private constructor. Initialises state.
+   * Public default constructor. Initialises state.
    */
-  private FileAnalyser() {
+  public FileAnalyser() {
     this.setFileDirectory(null);
     this.setFileName(null);
     this.stats = new Statistics();
@@ -74,16 +68,6 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     this.options = null;
     this.pattern = null;
     this.noOfLineTerminators = 0;
-  }
-  
-  /** 
-   * @return The Singleton instance of FileAnalyser.
-   */
-  public static synchronized FileAnalyser getInstance() {
-    if (instance == null) {
-      instance = new FileAnalyser();
-    }
-    return instance;
   }
   
   /**
@@ -120,6 +104,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     }
     
     this.options = options;
+    
     // Extract the pattern
     this.pattern = args[0];
   }
@@ -209,16 +194,16 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
         else if (possibleWindowsLT == true && c != '\n') {
           
           // Then it turns out the previous carriage return was not part of a Windows line terminator.
-          // The previous char was in fact an old Mac OSX way of line terminating, so 'add' it to the characters list as a space
+          // The previous char was in fact an old Mac OS X way of line terminating, so 'add' it to the characters list as a space
           // before adding the current character, which we've determined is NOT a line terminator.
           charsList.add(' ');
           charsList.add(c);
           possibleWindowsLT = false;
         }
-        else if (c == '\n') charsList.add(' ');
-        else if (c == '\r') { // Listen for a Windows line terminator string
+        else if (c == '\n') 
+          charsList.add(' ');
+        else if (c == '\r') // Listen for a Windows line terminator string
           possibleWindowsLT = true;
-        }
         else charsList.add(c);
       }
     }
@@ -559,7 +544,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @return true if the state was properly initialised, otherwise false.
    */
   public boolean isInitialStateOK() {
-    return (this.stats != null && this.sentences.size() == 0 && this.words.size() == 0 && this.characters == null &&
+    return (this.stats != null && this.sentences == null && this.words == null && this.characters == null &&
         this.log == null && this.options == null && this.pattern == null && this.noOfLineTerminators == 0 &&
         this.getFileDirectory() == null && this.getFileName() == null);
   }

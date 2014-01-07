@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * It contains various methods which calculate different sorts of statistics, depending on the needs of a FileAnalyser object.
  * It also contains a method to return the statistics as a human-readable String [toString()].
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class Statistics {
   

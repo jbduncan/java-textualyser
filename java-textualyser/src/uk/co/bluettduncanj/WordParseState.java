@@ -10,7 +10,7 @@ package uk.co.bluettduncanj;
  * (in particular, it's private helper method parseSentences()) that parses words from
  * characters obtained from the user-chosen text file.
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public enum WordParseState {
   LISTEN_FOR_NEW_WORD, READ_AND_STORE_CHARS;

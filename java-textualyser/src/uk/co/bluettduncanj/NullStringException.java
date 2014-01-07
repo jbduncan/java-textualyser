@@ -6,7 +6,7 @@ package uk.co.bluettduncanj;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class NullStringException extends Exception {
 

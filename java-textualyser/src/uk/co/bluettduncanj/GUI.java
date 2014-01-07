@@ -12,7 +12,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -36,10 +35,12 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Font;
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class GUI {
 
+  private FileAnalyser  fileAnalyser;
+  
   private JFrame        frmMainWindow;
   private JButton       btnChooseFile;
   private JTextField    txtChooseFile;
@@ -60,31 +61,19 @@ public class GUI {
   }
 
   /**
-   * A private method that is called by the ActionListener managing click events for btnAnalyse.
+   * A private method that is called by btnAnalyse's click event ActionListener.
    * It calls the necessary IFileAnalyser API methods to analyse the user's chosen text file and output it
    * to the GUI.
    */
   private synchronized void callFileAnalysis() {
     
-    SwingWorker<Void, List<Boolean>> worker = new SwingWorker<Void, List<Boolean>>() {
+    SwingWorker<Void, GUIMode> worker = new SwingWorker<Void, GUIMode>() {
 
       @Override
       protected Void doInBackground() throws Exception {
         
-        // Tell user that analysis is happening; publish the appropriate visibility and
-        // enabled status of various GUI elements before analysis.
-        List<Boolean> guiElementChunks = new ArrayList<Boolean>();
-        guiElementChunks.add(true);  // GUI.this.lblAnalyseStatus.setVisible(boolean)
-        guiElementChunks.add(false); // GUI.this.btnAnalyse.setEnabled(boolean)
-        guiElementChunks.add(false); // GUI.this.btnChooseFile.setEnabled(boolean)
-        guiElementChunks.add(false); // GUI.this.chbxAvgLens.setEnabled(boolean)
-        guiElementChunks.add(false); // GUI.this.chbxFreqs.setEnabled(boolean)
-        guiElementChunks.add(false); // GUI.this.chbxSaveLogFile.setEnabled(boolean)
-        guiElementChunks.add(false); // GUI.this.chbxTextOCs.setEnabled(boolean)
-        guiElementChunks.add(false); // GUI.this.txtPattern.setEnabled(boolean)
-        
-        // Publish these booleans...
-        this.publish(guiElementChunks);
+        // Tell user that analysis is happening - publish the appropriate mode before analysis
+        this.publish(GUIMode.ANALYSE_MODE);
         
         // Do analysis...
         
@@ -96,15 +85,16 @@ public class GUI {
         
         String[] pattern = new String[] { GUI.this.txtPattern.getText() };
         
-        FileAnalyser.getInstance().setOptions(options, pattern);
+        GUI.this.fileAnalyser.setOptions(options, pattern);
 
         // Attempt to analyse the file.
         try {
-          FileAnalyser.getInstance().process();
-          GUI.this.txtAreaStatsOutput.setText(FileAnalyser.getInstance().toString());
+          GUI.this.fileAnalyser.process();
+          GUI.this.txtAreaStatsOutput.setText(GUI.this.fileAnalyser.toString());
           
           // Only save the analysis results to a log file if the user requested it
-          if (GUI.this.chbxSaveLogFile.isSelected()) FileAnalyser.getInstance().saveLog();
+          if (GUI.this.chbxSaveLogFile.isSelected()) 
+            GUI.this.fileAnalyser.saveLog();
         }
         
         // If the user has not yet chosen a file, the exception will be caught and
@@ -124,44 +114,21 @@ public class GUI {
           e.printStackTrace();
         }
         
-        // Analysis finished; publish the GUI's original visibility/enabled statuses...
-        guiElementChunks = new ArrayList<Boolean>();
-        guiElementChunks.add(false);                             // GUI.this.lblAnalyseStatus.setVisible(boolean)
-        guiElementChunks.add(true);                              // GUI.this.btnAnalyse.setEnabled(boolean)
-        guiElementChunks.add(true);                              // GUI.this.btnChooseFile.setEnabled(boolean)
-        guiElementChunks.add(true);                              // GUI.this.chbxAvgLens.setEnabled(boolean)
-        guiElementChunks.add(true);                              // GUI.this.chbxFreqs.setEnabled(boolean)
-        guiElementChunks.add(true);                              // GUI.this.chbxSaveLogFile.setEnabled(boolean)
-        guiElementChunks.add(true);                              // GUI.this.chbxTextOCs.setEnabled(boolean)
-        guiElementChunks.add(GUI.this.chbxTextOCs.isSelected()); // GUI.this.txtPattern.setEnabled(boolean)
-        
-        // Publish...
-        this.publish(guiElementChunks);
+        // Analysis finished; set the GUI's default mode
+        this.publish(GUIMode.DEFAULT_MODE);
         
         return null;
       }
 
       /**
        * @param chunks
-       *          The published pieces of data to update the GUI with.
+       *          The list of published GUIMode enum values to update the GUI with.
        *
        * @see javax.swing.SwingWorker#process(java.util.List)
        */
       @Override
-      protected void process(List<List<Boolean>> chunks) {
-        
-        // Get latest published 'chunk' of values
-        List<Boolean> values = chunks.get(chunks.size() - 1);
-        
-        // Begin GUI updating
-        GUI.this.lblAnalyseStatus.setVisible(values.get(0));
-        GUI.this.btnAnalyse.setEnabled(values.get(1));
-        GUI.this.btnChooseFile.setEnabled(values.get(2));
-        GUI.this.chbxAvgLens.setEnabled(values.get(3));
-        GUI.this.chbxFreqs.setEnabled(values.get(4));
-        GUI.this.chbxSaveLogFile.setEnabled(values.get(5));
-        GUI.this.chbxTextOCs.setEnabled(values.get(6));
-        GUI.this.txtPattern.setEnabled(values.get(7));
+      protected void process(List<GUIMode> chunks) {
+        GUI.this.applyGUIMode(chunks.get(chunks.size() - 1)); // Get latest published chunk
       }
       
     };
@@ -191,11 +158,45 @@ public class GUI {
       // Get and set the file's name and directory and set in the appropriate fields of the fileAnalyser.
       String fileName = file.getName();
       String fileDir = file.getParent();
-      FileAnalyser.getInstance().setFileDirectory(fileDir);
-      FileAnalyser.getInstance().setFileName(fileName);
+      GUI.this.fileAnalyser.setFileDirectory(fileDir);
+      GUI.this.fileAnalyser.setFileName(fileName);
       
       // Set the 'Choose file' text box to the file's absolute path.
       this.txtChooseFile.setText(fileDir + File.separator + fileName);
+    }
+  }
+  
+  /**
+   * A convenience method to set the GUI to reflect the desired mode.
+   */
+  private void applyGUIMode(GUIMode mode) {
+    switch (mode) {
+      case DEFAULT_MODE:
+        
+        this.lblAnalyseStatus.setVisible(false);
+        this.btnAnalyse.setEnabled(true);
+        this.btnChooseFile.setEnabled(true);
+        this.chbxAvgLens.setEnabled(true);
+        this.chbxFreqs.setEnabled(true);
+        this.chbxSaveLogFile.setEnabled(true);
+        this.chbxTextOCs.setEnabled(true);
+        this.txtPattern.setEnabled(this.chbxTextOCs.isSelected());
+        
+      break;
+      case ANALYSE_MODE:
+        
+        this.lblAnalyseStatus.setVisible(true);
+        this.btnAnalyse.setEnabled(false);
+        this.btnChooseFile.setEnabled(false);
+        this.chbxAvgLens.setEnabled(false);
+        this.chbxFreqs.setEnabled(false);
+        this.chbxSaveLogFile.setEnabled(false);
+        this.chbxTextOCs.setEnabled(false);
+        this.txtPattern.setEnabled(false);
+        
+      break;
+      default:
+        // Do nothing  
     }
   }
 
@@ -203,6 +204,8 @@ public class GUI {
    * Initialise the contents of the main window frame.
    */
   private void initialize() {
+    
+    this.fileAnalyser = new FileAnalyser();
     
     try {
       // Set the native system Look and Feel
@@ -254,6 +257,7 @@ public class GUI {
       public void actionPerformed(ActionEvent arg0) {
         GUI.this.callFileAnalysis();
       }
+      
     });
     btnAnalyse.setBounds(11, 188, 136, 23);
     this.frmMainWindow.getContentPane().add(btnAnalyse);

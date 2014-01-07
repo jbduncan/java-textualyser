@@ -30,8 +30,9 @@ public class AbstractFileHandlerTest {
    */
   @Before
   public void setUp() throws Exception {
+    
     // Test both children classes of AbstractFileHandler
-    fileHandler1 = FileAnalyser.getInstance();
+    fileHandler1 = new FileAnalyser();
     fileHandler1.setFileDirectory(fileDir);
     fileHandler1.setFileName(fileName);
     fileHandler2 = new LogFileHandler(fileName, fileDir, null);

@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
  * IFileAnalyser is an interface which specifies a contract that all text file analyser implementations
  * must obey. 
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public interface IFileAnalyser {
 

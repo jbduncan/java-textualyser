@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  * component is to save the statistical results of a Statistics object to an appropriately named log file,
  * in the same directory as the text file whose statistics have been calculated.
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class LogFileHandler extends AbstractFileHandler {
   

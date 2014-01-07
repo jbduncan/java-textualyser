@@ -9,7 +9,7 @@ package uk.co.bluettduncanj;
  * This is a variation of the BoyerMoore.java class found at algs4.cs.princeton.edu/53substring/BoyerMoore.java.html.
  * This implementation only uses the Bad Character rule to enhance searching speeds.
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class BoyerMoore {
 

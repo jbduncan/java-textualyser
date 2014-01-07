@@ -18,7 +18,7 @@ public class ReqsTest {
   @Test
   public void testS1() throws NullStringException {
     // Set up output for first file
-    FileAnalyser fileAnalyser = FileAnalyser.getInstance();
+    FileAnalyser fileAnalyser = new FileAnalyser();
     fileAnalyser.setFileDirectory("src");
     fileAnalyser.setFileName("test.txt");
     fileAnalyser.setOptions(new boolean[]{ false, false, false }, new String[]{null});

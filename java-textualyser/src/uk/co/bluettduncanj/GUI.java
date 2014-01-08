@@ -6,13 +6,13 @@ package uk.co.bluettduncanj;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
+import java.awt.event.WindowEvent;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,10 +29,16 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import java.awt.Font;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
+
 
 /**
  * @author Jonathan Bluett-Duncan
@@ -52,6 +58,10 @@ public class GUI {
   private JCheckBox     chbxFreqs;
   private JCheckBox     chbxSaveLogFile;
   private JTextArea     txtAreaStatsOutput;
+  private JMenuItem     mntmAnalyse;
+  private JMenu         mnFile;
+  private JMenuItem     mntmQuit;
+  private JMenuItem     mntmChooseAFile;
 
   /**
    * Create the application.
@@ -68,7 +78,26 @@ public class GUI {
   private synchronized void callFileAnalysis() {
     
     SwingWorker<Void, GUIMode> worker = new SwingWorker<Void, GUIMode>() {
+      
+      /** Checks whether the worker thread has been interrupted */
+      private void failIfInterrupted() throws InterruptedException {
+        if (Thread.currentThread().isInterrupted()) {
+          this.publish(GUIMode.DEFAULT_MODE);
+          throw new InterruptedException("Interrupted while analysing file");
+        }
+      }
 
+      /**
+       * Analyses the file specified by the user.
+       * 
+       * This operation cannot be cancelled (interrupted) after the file analysis phase begins. 
+       * For this reason, we only check if the worker thread has been interrupted once shortly after the start of the operation.
+       * 
+       * @return nothing.
+       * @throws Exception
+       *
+       * @see javax.swing.SwingWorker#doInBackground()
+       */
       @Override
       protected Void doInBackground() throws Exception {
         
@@ -84,6 +113,8 @@ public class GUI {
         options[2] = GUI.this.chbxTextOCs.isSelected();
         
         String[] pattern = new String[] { GUI.this.txtPattern.getText() };
+        
+        this.failIfInterrupted();
         
         GUI.this.fileAnalyser.setOptions(options, pattern);
 
@@ -166,6 +197,8 @@ public class GUI {
     switch (mode) {
       case DEFAULT_MODE:
         
+        this.mntmAnalyse.setEnabled(true);
+        this.mntmChooseAFile.setEnabled(true);
         this.lblAnalyseStatus.setVisible(false);
         this.btnAnalyse.setEnabled(true);
         this.btnChooseFile.setEnabled(true);
@@ -178,6 +211,8 @@ public class GUI {
       break;
       case ANALYSE_MODE:
         
+        this.mntmAnalyse.setEnabled(false);
+        this.mntmChooseAFile.setEnabled(false);
         this.lblAnalyseStatus.setVisible(true);
         this.btnAnalyse.setEnabled(false);
         this.btnChooseFile.setEnabled(false);
@@ -219,7 +254,7 @@ public class GUI {
     }
     
     this.frmMainWindow = new JFrame();
-    this.frmMainWindow.setTitle("Text Analyser");
+    this.frmMainWindow.setTitle("java-textualyser");
     this.frmMainWindow.setResizable(false);
     this.frmMainWindow.setBounds(100, 100, 440, 420);
     this.frmMainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -228,10 +263,10 @@ public class GUI {
     this.txtChooseFile = new JTextField();
     this.txtChooseFile.setEditable(false);
     this.txtChooseFile.setColumns(10);
-    this.txtChooseFile.setBounds(11, 12, 273, 20);
+    this.txtChooseFile.setBounds(11, 12, 243, 20);
     this.frmMainWindow.getContentPane().add(this.txtChooseFile);
 
-    this.btnChooseFile = new JButton("Choose");
+    this.btnChooseFile = new JButton("Choose a file...");
     this.btnChooseFile.addActionListener(new ActionListener() {
 
       @Override
@@ -240,7 +275,7 @@ public class GUI {
       }
 
     });
-    btnChooseFile.setBounds(294, 11, 127, 23);
+    btnChooseFile.setBounds(264, 11, 157, 23);
     this.frmMainWindow.getContentPane().add(btnChooseFile);
 
     this.btnAnalyse = new JButton("Analyse");
@@ -290,7 +325,7 @@ public class GUI {
     pnlOptions.add(this.txtPattern);
 
     JScrollPane scrlStatsOutput = new JScrollPane();
-    scrlStatsOutput.setBounds(11, 222, 410, 159);
+    scrlStatsOutput.setBounds(11, 222, 410, 138);
     this.frmMainWindow.getContentPane().add(scrlStatsOutput);
 
     this.txtAreaStatsOutput = new JTextArea();
@@ -302,10 +337,52 @@ public class GUI {
     this.chbxSaveLogFile.setBounds(11, 39, 273, 23);
     this.frmMainWindow.getContentPane().add(chbxSaveLogFile);
 
-    this.lblAnalyseStatus = new JLabel("Analysing ...");
+    this.lblAnalyseStatus = new JLabel("Analysing, this may take a few minutes...");
     this.lblAnalyseStatus.setBounds(157, 192, 264, 14);
     this.lblAnalyseStatus.setVisible(false);
     this.frmMainWindow.getContentPane().add(this.lblAnalyseStatus);
+    
+    JMenuBar menuBar = new JMenuBar();
+    frmMainWindow.setJMenuBar(menuBar);
+    
+    mnFile = new JMenu("File");
+    mnFile.setEnabled(true);
+    menuBar.add(mnFile);
+    
+    mntmChooseAFile = new JMenuItem("Choose a file...");
+    mntmChooseAFile.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+        GUI.this.chooseFile();
+      }
+      
+    });
+    mnFile.add(mntmChooseAFile);
+    
+    mntmQuit = new JMenuItem("Quit");
+    mntmQuit.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        GUI.this.close();
+      }
+      
+    });
+    
+    mntmAnalyse = new JMenuItem("Analyse");
+    mntmAnalyse.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+        GUI.this.callFileAnalysis();
+      }
+      
+    });
+    mnFile.add(mntmAnalyse);
+    mnFile.add(mntmQuit);
+    
+    
     this.frmMainWindow.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { this.txtChooseFile, btnChooseFile,
         chbxSaveLogFile, pnlOptions, this.chbxAvgLens, this.chbxFreqs, this.chbxTextOCs, this.txtPattern, btnAnalyse,
         this.txtAreaStatsOutput, scrlStatsOutput, this.frmMainWindow.getContentPane() }));
@@ -328,6 +405,17 @@ public class GUI {
         }
       }
     });
+  }
+  
+  /**
+   * Close the main window. If the main window's default close operation is JFrame.EXIT_ON_CLOSE, the 
+   * application will also shut down.
+   * 
+   * Behaves exactly as if the [x] on a window is clicked in normal applications.
+   */
+  private void close() {
+    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+        new WindowEvent(this.frmMainWindow, WindowEvent.WINDOW_CLOSING));
   }
 
   /**

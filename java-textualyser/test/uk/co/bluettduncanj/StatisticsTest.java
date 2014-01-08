@@ -17,7 +17,7 @@ import uk.co.bluettduncanj.Statistics;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class StatisticsTest {
   

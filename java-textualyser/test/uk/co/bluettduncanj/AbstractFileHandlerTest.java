@@ -18,7 +18,7 @@ import uk.co.bluettduncanj.LogFileHandler;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class AbstractFileHandlerTest {
   

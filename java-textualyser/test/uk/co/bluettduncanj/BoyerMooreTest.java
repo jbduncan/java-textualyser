@@ -12,7 +12,7 @@ import uk.co.bluettduncanj.BoyerMoore;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class BoyerMooreTest {
 

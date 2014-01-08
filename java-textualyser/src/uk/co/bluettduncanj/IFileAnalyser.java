@@ -14,54 +14,35 @@ import java.io.FileNotFoundException;
  * @author Jonathan Bluett-Duncan
  */
 public interface IFileAnalyser {
-
-  /**
-   * setFileName(String) defines the condition that all file analysers must be able to 
-   * use file names to identify text files.
-   * 
-   * @param fileName: The name of the file to set.
-   */
-  /*
-  public void setFileName(String fileName);
-  */
-  
-  /**
-   * setFileDirectory(String) defines the condition that all file analysers must be able to 
-   * use file directories to identify the filesystem locations of text files.
-   * 
-   * @param fileName: The directory of the file to set.
-   */
-  /*
-  public void setFileDirectory(String fileDir);
-  */
   
   /**
    * setFilePath(String) defines the condition that all file analysers must be able to 
    * use file paths to identify text files and their locations on the file system.
    * 
    * @param fileName: The directory of the file to set.
+   * @throws NullPointerException if the argument is <code>null</code>.
    */
-  public void setFilePath(String filePath);
+  public void setFilePath(String filePath) throws NullPointerException;
   
   /**
    * process() defines the condition that all file analysers must have a means of
    * parsing and analysing the contents of a text file.
    * 
-   * @throws NullStringException: This exception will be thrown if the file name or directory are null (not set).
+   * @throws NullPointerException if the file path is not set.
+   * @throws FileNotFoundException if the file cannot be found or read.
    */
-  public void process() throws NullStringException;
+  public void process() throws NullPointerException, FileNotFoundException;
   
   /**
    * saveLog() defines the condition that all file analysers must be able to save analysis results (statistics)
    * for a text file to a different log file.
    * 
-   * @throws NullStringException: This exception will be thrown if the file name or directory are null (not set).
-   * It will also be thrown if no statistics are found i.e. process() has not been called.
-   * @throws FileNotFoundException: This will be thrown if the file path "does not denote an existing, writable 
+   * @throws NullPointerException if the file path is not set, or if no statistics are found i.e. process() has not been called.
+   * @throws FileNotFoundException if the file path "does not denote an existing, writable 
    * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
    * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter).
    */
-  public void saveLog() throws NullStringException, FileNotFoundException;
+  public void saveLog() throws NullPointerException, FileNotFoundException;
   
   /**
    * toString() defines the condition that all file analysers must be able to return analysis results (statistics)
@@ -80,7 +61,7 @@ public interface IFileAnalyser {
    * @param args: Other String-based arguments which different file analyser implementations may use or require from callers 
    *              to further customise analyses.
    *              
-   * @throws IllegalArgumentException: This exception will be thrown if the file analyser implementation reports
+   * @throws IllegalArgumentException if the file analyser implementation reports
    * a program-breaking error with any of the parameter arguments (options and/or args).
    */
   public void setOptions(boolean[] options, String[] args) throws IllegalArgumentException;

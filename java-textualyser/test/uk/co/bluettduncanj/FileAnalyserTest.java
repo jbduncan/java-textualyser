@@ -14,7 +14,7 @@ import uk.co.bluettduncanj.FileAnalyser;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class FileAnalyserTest {
   

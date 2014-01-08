@@ -22,49 +22,25 @@ public abstract class AbstractFileHandler {
   /** The file to be handled */
   private File file;
   
-  /** The name of a file */
-  //private String fileName;
-  
-  /** The directory (absolute path) of a file */
-  //private String fileDir;
-  
   /** Default super constructor for subclasses of AbstractFileHandler */
   public AbstractFileHandler() {
     super();
   }
   
   /**
-   * Super setter of file name for subclasses of AbstractFileHandler.
-   * 
-   * @param fileName: The file name to set.
-   */
-  /*
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
-  */
-  
-  /**
-   * Super setter of file directory for subclasses of AbstractFileHandler.
-   * 
-   * @param fileName: The file directory to set.
-   */
-  /*
-  public void setFileDirectory(String fileDir) {
-    this.fileDir = fileDir;
-  }
-  */
-  
-  /**
    * Super setter of file path for subclasses of AbstractFileHandler.
    * 
-   * This method treats the setting of filePath in exactly the same way as calling the java.io.File(String) constructor,
-   * and so all appropriate subclasses of Exception will be thrown in the same exceptional situations.
-   * (See the Javadocs for java.io.File and java.io.File(String) for more details).
+   * This method sets the file path by calling the java.io.File(String) constructor, and so throws the same Exceptions
+   * as that constructor. (See the Javadocs for java.io.File and java.io.File(String) for more details). However, this
+   * method also throws an additional FileNotFoundException depending on whether the file at the file path exists and is readable.
    * 
    * @throws NullPointerException if the argument is <code>null</code>.
    */
   public void setFilePath(String filePath) throws NullPointerException {
+    if (filePath == null) {
+      throw new NullPointerException("The file path cannot be null.");
+    }
+    
     this.file = new File(filePath);
   }
   
@@ -75,7 +51,6 @@ public abstract class AbstractFileHandler {
    * @throws NullPointerException if no file path has been set.
    */
   public String getFilePath() throws NullPointerException {
-    //return this.fileDir + File.separator + this.fileName;
     return this.file.getAbsolutePath();
   }
    
@@ -110,6 +85,20 @@ public abstract class AbstractFileHandler {
       return false;
     }
     return true;
+  }
+  
+  /**
+   * Checks whether the file at the file path given through setFilePath(String) exists and can be read.
+   * 
+   * @return true if the file exists and can be read, otherwise false.
+   */
+  public boolean fileExistsAndReadable() {
+    try {
+      return this.file.exists();
+    }
+    catch (SecurityException e) {
+      return false;
+    }
   }
   
 }

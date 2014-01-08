@@ -93,8 +93,8 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @param options: The three-element size boolean array of options that determines custom analysis output.
    * @param args: String arguments that should contain a text pattern in its first index.
    * 
-   * @throws IllegalArgumentException: This will be thrown if options is not exactly 3 indexes long (options.length != 3). 
-   * It will also be thrown if options[2] (the option determining whether 'Text Occurrences' will be calculated) == true 
+   * @throws IllegalArgumentExceptionif options is not exactly 3 indexes long (options.length != 3), or 
+   * if options[2] (the option determining whether 'Text Occurrences' will be calculated) == true 
    * && args[0] (the pattern argument) == null.
    *
    * @see uk.co.bluettduncanj.IFileAnalyser#setOptions(boolean[], java.lang.Object)
@@ -104,26 +104,34 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
       throw new IllegalArgumentException("The number of options is invalid.");
     }
     
-    if (options[2] == true && pattern == null) {
-      throw new IllegalArgumentException("The option to analyse 'Text Occurrences' is true, but the given text pattern is null.");
+    if (options[2] == true) {
+      if (args == null) {
+        throw new IllegalArgumentException("The option to analyse 'Text Occurrences' is true, but the String arguments array is null.");
+      }
+      if (args[0] == null) {
+        throw new IllegalArgumentException("The option to analyse 'Text Occurrences' is true, but the given text pattern is null.");
+      }
     }
     
     this.options = options;
     
-    // Extract the pattern
-    this.pattern = args[0];
+    if (options[2] == true) {
+      // Extract the pattern
+      this.pattern = args[0];
+    }
   }
   
   /**
    * A public API method that parses, analyses and generates statistics for the contents of the file defined by the user
    * through the other API methods setFileName(String) and setFileDirectory(String).
    * 
-   * @throws NullStringException: This exception will be thrown if the file name or directory are null (not set).
+   * @throws NullPointerException if the file path is not set.
+   * @throws FileNotFoundException if the file does not exist or cannot be read.
    *
    * @see uk.co.bluettduncanj.IFileAnalyser#process()
    */
   @Override
-  public void process() throws NullStringException {
+  public void process() throws NullPointerException, FileNotFoundException {
     this.stats.reset();
     this.parse();
     this.analyse();
@@ -135,10 +143,16 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * The contents will be parsed into appropriate sentences, words and characters for later use by a call to analyse().
    * 
    * @throws NullPointerException if the file path is not set.
+   * @throws FileNotFoundException if the file does not exist or cannot be read.
    */
-  private void parse() throws NullPointerException {
+  private void parse() throws NullPointerException, FileNotFoundException {
     if (!this.isFilePathSet()) {
       throw new NullPointerException("File path is not set.");
+    }
+    
+    // Check whether the file at the given file path can be found
+    if (!this.fileExistsAndReadable()) {
+      throw new FileNotFoundException("File cannot be found.");
     }
     
     this.parseChars();
@@ -160,14 +174,14 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     // This time, read in each character at a time, rather than line-after-line.
     // Use a list of Characters for easy adding.
     List<Character> charsList = new ArrayList<Character>();
-    BufferedReader read;
+    BufferedReader reader;
     int value = 0;
     try {
-      read = new BufferedReader(new FileReader(this.getFilePath()));
+      reader = new BufferedReader(new FileReader(this.getFilePath()));
       
       // A flag that listens for '\r' carriage returns to allow Windows line terminators (LT) '\r\n' to be recognised
       boolean possibleWindowsLT = false;
-      while ((value = read.read()) != -1) {
+      while ((value = reader.read()) != -1) {
         char c = (char) value;
         
         // For some inexplicable reason, unexpected behaviour occurs when a line terminator-related character is added to
@@ -294,11 +308,11 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     // This time, read in each character at a time, rather than line-after-line.
     // Use a list of Characters temporarily for easy adding.
     List<Character> charsList = new ArrayList<Character>();
-    BufferedReader read;
+    BufferedReader reader;
     int value = 0;
     try {
-      read = new BufferedReader(new FileReader(this.getFilePath()));
-      while ((value = read.read()) != -1) {
+      reader = new BufferedReader(new FileReader(this.getFilePath()));
+      while ((value = reader.read()) != -1) {
         char c = (char) value;
         
         // For some inexplicable reason, unexpected behaviour occurs when a line terminator-related character is added to
@@ -403,23 +417,20 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    */
   private void parseChars() {
     
-    // Create a reference to the user-selected file
-    //File file = new File(this.getFilePath());
-    
     // Initialise the line terminator counter
     this.noOfLineTerminators = 0;
     
     // Use a List<Character> for easy adding of char elements
     List<Character> tokens = new ArrayList<Character>();
-    BufferedReader read;
+    BufferedReader reader;
     
     // Attempt to read the file
     try {
-      read = new BufferedReader(new FileReader(this.getFilePath()));
+      reader = new BufferedReader(new FileReader(this.getFilePath()));
       String line;
       
       // Add the character contents of each line to the character tokens
-      while ((line = read.readLine()) != null) {
+      while ((line = reader.readLine()) != null) {
         for (char c : line.toCharArray()) tokens.add(c);
         
         // Note: I want line terminators to count as whitespaces. Therefore I keep a counter that counts the number of lines,
@@ -488,7 +499,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     }
     
     String logFileName = "log_" + this.getFileName();
-    String logFilePath = logFileName + File.separator + this.getFileDirectory();
+    String logFilePath = this.getFileDirectory() + File.separator + logFileName;
     
     this.log = new LogFileHandler(logFilePath, this.stats.toString());
     this.log.save();

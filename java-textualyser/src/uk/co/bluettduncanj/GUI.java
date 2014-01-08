@@ -39,7 +39,7 @@ import java.awt.Font;
  */
 public class GUI {
 
-  private FileAnalyser  fileAnalyser;
+  private IFileAnalyser fileAnalyser;
   
   private JFrame        frmMainWindow;
   private JButton       btnChooseFile;
@@ -72,7 +72,7 @@ public class GUI {
       @Override
       protected Void doInBackground() throws Exception {
         
-        // Tell user that analysis is happening - publish the appropriate mode before analysis
+        // Tell user that analysis is happening - publish the appropriate interface mode before analysis
         this.publish(GUIMode.ANALYSE_MODE);
         
         // Do analysis...

@@ -21,7 +21,9 @@ public interface IFileAnalyser {
    * 
    * @param fileName: The name of the file to set.
    */
+  /*
   public void setFileName(String fileName);
+  */
   
   /**
    * setFileDirectory(String) defines the condition that all file analysers must be able to 
@@ -29,7 +31,17 @@ public interface IFileAnalyser {
    * 
    * @param fileName: The directory of the file to set.
    */
+  /*
   public void setFileDirectory(String fileDir);
+  */
+  
+  /**
+   * setFilePath(String) defines the condition that all file analysers must be able to 
+   * use file paths to identify text files and their locations on the file system.
+   * 
+   * @param fileName: The directory of the file to set.
+   */
+  public void setFilePath(String filePath);
   
   /**
    * process() defines the condition that all file analysers must have a means of

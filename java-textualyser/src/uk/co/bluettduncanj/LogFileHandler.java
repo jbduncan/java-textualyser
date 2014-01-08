@@ -26,10 +26,17 @@ public class LogFileHandler extends AbstractFileHandler {
   /**
    * Parameterised constructor - Initialises state to parameter data
    */
+  /*
   public LogFileHandler(String fileName, String fileDir, String logString) {
     super();
     this.setFileName(fileName);
     this.setFileDirectory(fileDir);
+    this.logString = logString;
+  }
+  */
+  public LogFileHandler(String filePath, String logString) {
+    super();
+    this.setFilePath(filePath);
     this.logString = logString;
   }
   
@@ -41,7 +48,7 @@ public class LogFileHandler extends AbstractFileHandler {
    * 
    * If the log file already exists and contains data, it will be overwritten with the new log String.
    * 
-   * @throws FileNotFoundException: This will be thrown if the file path "does not denote an existing, writable 
+   * @throws FileNotFoundException if the file path "does not denote an existing, writable 
    * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
    * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter).
    */

@@ -54,12 +54,17 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   /** A counter for the number of line terminators in the text file, that will be used by Statistics.calcNoOfWhitespaces */
   private int noOfLineTerminators;
   
+  /** A compiled regular expression designed to match 'punctuation' marks */
+  private static final Pattern punctuationCompiled = Pattern.compile("[!?/:;,.]");
+  
+  /** A common error message used to inform the user when a file related IO error has occurred */
+  private static final String FileIOErrorMessage = 
+      "There was an unexpected problem reading the file! This program will most likely crash or respond in an unusual way.";
+  
   /**
    * Public default constructor. Initialises state.
    */
   public FileAnalyser() {
-    this.setFileDirectory(null);
-    this.setFileName(null);
     this.stats = new Statistics();
     this.sentences = null;
     this.words = null;
@@ -125,22 +130,15 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   }
 
   /**
-   * This method parses the contents of the text file whose file name and directory are stored in this class as
-   * fileName and fileDir.
+   * This method parses the contents of the text file whose file path is stored in this class as filePath.
    * 
    * The contents will be parsed into appropriate sentences, words and characters for later use by a call to analyse().
    * 
-   * @throws NullStringException: This exception will be thrown if the file name or directory are null (not set).
+   * @throws NullPointerException if the file path is not set.
    */
-  private void parse() throws NullStringException {
-    if (this.getFileName() == null && this.getFileDirectory() == null) {
-      throw new NullStringException("File name and directory are not set.");
-    }
-    if (this.getFileName() == null) {
-      throw new NullStringException("File name is not set.");
-    }
-    if (this.getFileDirectory() == null) {
-      throw new NullStringException("File directory is not set.");
+  private void parse() throws NullPointerException {
+    if (!this.isFilePathSet()) {
+      throw new NullPointerException("File path is not set.");
     }
     
     this.parseChars();
@@ -163,10 +161,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     // Use a list of Characters for easy adding.
     List<Character> charsList = new ArrayList<Character>();
     BufferedReader read;
-    File file = new File(this.getFilePath());
     int value = 0;
     try {
-      read = new BufferedReader(new FileReader(file));
+      read = new BufferedReader(new FileReader(this.getFilePath()));
       
       // A flag that listens for '\r' carriage returns to allow Windows line terminators (LT) '\r\n' to be recognised
       boolean possibleWindowsLT = false;
@@ -209,8 +206,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     }
     catch (IOException e) {
       e.printStackTrace();
-      String errorMessage = "There was an unexpected problem reading the file! This program will most likely crash or respond in an unusual way.";
-      JOptionPane.showMessageDialog(null, errorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, FileAnalyser.FileIOErrorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
     }
     
     // Now convert the temporary character list to an array for easy manipulation
@@ -292,9 +288,6 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     
     // Reset the contents of the words data structure
     this.words = new ArrayList<String>();
-    
-    // A compiled regular expression designed to match 'punctuation' marks
-    final Pattern punctuationCompiled = Pattern.compile("[!?/:;,.]");
      
     // Get a fresh batch of character text from the text file.
     // This allows us to properly deal with line terminator characters (which are considered whitespace).
@@ -302,10 +295,9 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     // Use a list of Characters temporarily for easy adding.
     List<Character> charsList = new ArrayList<Character>();
     BufferedReader read;
-    File file = new File(this.getFilePath());
     int value = 0;
     try {
-      read = new BufferedReader(new FileReader(file));
+      read = new BufferedReader(new FileReader(this.getFilePath()));
       while ((value = read.read()) != -1) {
         char c = (char) value;
         
@@ -322,8 +314,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     }
     catch (IOException e) {
       e.printStackTrace();
-      String errorMessage = "There was an unexpected problem reading the file! This program will most likely crash or respond in an unusual way.";
-      JOptionPane.showMessageDialog(null, errorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, FileAnalyser.FileIOErrorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
     }
     
     // Now convert the temporary character list to an array for easy manipulation
@@ -358,7 +349,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
             
             // If the current char is neither a whitespace nor a punctuation mark, make it the start of the next word and
             // change the state so that we start reading and adding more characters to it.
-            if (!Statistics.isWhitespace(c) && !punctuationCompiled.matcher(cString).matches()) {
+            if (!Statistics.isWhitespace(c) && !FileAnalyser.punctuationCompiled.matcher(cString).matches()) {
               currentWord = cString;
               state = WordParseState.READ_AND_STORE_CHARS;
             }
@@ -378,7 +369,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
             // If the current char is a whitespace or punctuation character, or if we are at the final character 
             // (i.e. end of WHILE loop), then our current word is complete. 
             // Therefore, we need to save it to the words list.
-            if ((Statistics.isWhitespace(c) || punctuationCompiled.matcher(cString).matches()) || 
+            if ((Statistics.isWhitespace(c) || FileAnalyser.punctuationCompiled.matcher(cString).matches()) || 
                 charIndex == chars.length - 1) {
               this.words.add(currentWord);
               currentWord = null;
@@ -392,7 +383,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
             
             // If the current char is a whitespace or punctuation char, but we still have characters left to look through, 
             // then change the state to start listening for the start of another word. 
-            if ((Statistics.isWhitespace(c) || punctuationCompiled.matcher(cString).matches())
+            if ((Statistics.isWhitespace(c) || FileAnalyser.punctuationCompiled.matcher(cString).matches())
                 && charIndex < chars.length - 1) {
               state = WordParseState.LISTEN_FOR_NEW_WORD;
             }
@@ -413,7 +404,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   private void parseChars() {
     
     // Create a reference to the user-selected file
-    File file = new File(this.getFilePath());
+    //File file = new File(this.getFilePath());
     
     // Initialise the line terminator counter
     this.noOfLineTerminators = 0;
@@ -424,7 +415,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     
     // Attempt to read the file
     try {
-      read = new BufferedReader(new FileReader(file));
+      read = new BufferedReader(new FileReader(this.getFilePath()));
       String line;
       
       // Add the character contents of each line to the character tokens
@@ -439,12 +430,81 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     }
     catch (IOException e) {
       e.printStackTrace();
-      String errorMessage = "There was an unexpected problem reading the file! This program will most likely crash or respond in an unusual way.";
-      JOptionPane.showMessageDialog(null, errorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, FileAnalyser.FileIOErrorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
     }
     
     // Convert the List<Character> of tokens to a char array to be stored for later use
     this.characters = this.toCharArray(tokens);
+  }
+
+  /**
+   * This method analyses the data structures holding the parsed contents of the text file whose file name and directory
+   * are stored in this class as fileName and fileDir.
+   * 
+   * This method is dependent on the outcome of parse(). Therefore parse() needs to be called first.
+   */
+  private void analyse() {
+    
+    // Choose whether to analyse 'Average Lengths' statistics or not (see Javadoc for setOptions(...))
+    if (options[0] == true) {
+      this.stats.calcAvgSentenceLen(this.sentences);
+      this.stats.calcAvgWordLen(this.words);
+    }
+    
+    // Choose whether to analyse 'Frequencies' statistics or not (see Javadoc for setOptions(...))
+    if (options[1] == true) {
+      this.stats.calcCharFreq(this.characters);
+      this.stats.calcNoOfEnglishANs(this.characters);
+      this.stats.calcNoOfNonANs(this.characters);
+      this.stats.calcNoOfWhitespaces(this.characters, this.noOfLineTerminators);
+      this.stats.calcNoOfIntlChars(this.characters);
+      this.stats.calcNoOfSuffixes(this.words);
+    }
+    
+    // Choose whether to analyse the 'Text Occurrences' statistic or not (see Javadoc for setOptions(...))
+    if (options[2] == true) this.stats.calcNoOfTextOCs(this.characters, this.pattern.toCharArray());
+  }
+
+  /**
+   * A public API method that takes statistical results from a call to process() and saves a human-readable version
+   * into a log file in the same directory as the processed text file. The naming convention of log files is
+   * 'log_fileName'.
+   * 
+   * E.g. If the text file 'C:\Documents\Lord of the Rings.txt' was processed, then calling saveLog() would save
+   *      the statistics to 'C:\Documents\log_Lord of the Rings.txt'.
+   * 
+   * @throws NullPointerException if the file name or directory are null (not set), or if no statistics are found 
+   * i.e. process() has not been called.
+   * @throws FileNotFoundException if the file path "does not denote an existing, writable 
+   * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
+   * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter). 
+   *
+   * @see uk.co.bluettduncanj.IFileAnalyser#saveLog()
+   */
+  @Override
+  public void saveLog() throws NullPointerException, FileNotFoundException {
+    if (!this.isFilePathSet()) {
+      throw new NullPointerException("File path is not set.");
+    }
+    
+    String logFileName = "log_" + this.getFileName();
+    String logFilePath = logFileName + File.separator + this.getFileDirectory();
+    
+    this.log = new LogFileHandler(logFilePath, this.stats.toString());
+    this.log.save();
+  } 
+  
+  /**
+   * A public API method that takes statistical results from a call to process() and returns it in a human-readable
+   * String format.
+   * 
+   * @return a human-readable representation of the statistics, or null if no statistics exist (i.e. if process() was not called).
+   *
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return stats.toString();
   }
   
   /**
@@ -461,81 +521,6 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   }
 
   /**
-   * This method analyses the data structures holding the parsed contents of the text file whose file name and directory
-   * are stored in this class as fileName and fileDir.
-   * 
-   * This method is dependent on the outcome of parse(). Therefore parse() needs to be called first.
-   */
-  private void analyse() {
-    
-    // Choose whether to analyse 'Average Lengths' statistics (see Javadoc for setOptions(...))
-    if (options[0] == true) {
-      this.stats.calcAvgSentenceLen(this.sentences);
-      this.stats.calcAvgWordLen(this.words);
-    }
-    
-    // Choose whether to analyse 'Frequencies' statistics (see Javadoc for setOptions(...))
-    if (options[1] == true) {
-      this.stats.calcCharFreq(this.characters);
-      this.stats.calcNoOfEnglishANs(this.characters);
-      this.stats.calcNoOfNonANs(this.characters);
-      this.stats.calcNoOfWhitespaces(this.characters, this.noOfLineTerminators);
-      this.stats.calcNoOfIntlChars(this.characters);
-      this.stats.calcNoOfSuffixes(this.words);
-    }
-    
-    // Choose whether to analyse the 'Text Occurrences' statistic (see Javadoc for setOptions(...))
-    if (options[2] == true) this.stats.calcNoOfTextOCs(this.characters, this.pattern.toCharArray());
-  }
-
-  /**
-   * A public API method that takes statistical results from a call to process() and saves a human-readable version
-   * into a log file in the same directory as the processed text file. The naming convention of log files is
-   * 'log_fileName'.
-   * 
-   * E.g. If the text file 'C:\Documents\Lord of the Rings.txt' was processed, then calling saveLog() would save
-   *      the statistics to 'C:\Documents\log_Lord of the Rings.txt'.
-   * 
-   * @throws NullStringException: This exception will be thrown if the file name or directory are null (not set).
-   * It will also be thrown if no statistics are found i.e. process() has not been called.
-   * @throws FileNotFoundException: This will be thrown if the file path "does not denote an existing, writable 
-   * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
-   * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter). 
-   *
-   * @see uk.co.bluettduncanj.IFileAnalyser#saveLog()
-   */
-  @Override
-  public void saveLog() throws NullStringException, FileNotFoundException {
-    if (this.getFileName() == null && this.getFileDirectory() == null) {
-      throw new NullStringException("File name and directory are not set.");
-    }
-    if (this.getFileName() == null) {
-      throw new NullStringException("File name is not set.");
-    }
-    if (this.getFileDirectory() == null) {
-      throw new NullStringException("File directory is not set.");
-    }
-    
-    String logFileName = "log_" + this.getFileName();
-    
-    this.log = new LogFileHandler(logFileName, this.getFileDirectory(), this.stats.toString());
-    this.log.save();
-  } 
-  
-  /**
-   * A public API method that takes statistical results from a call to process() and returns it in a human-readable
-   * String format.
-   * 
-   * @return a human-readable representation of the statistics, or null if no statistics exist (i.e. if process() was not called).
-   *
-   * @see java.lang.Object#toString()
-   */
-  @Override
-  public String toString() {
-    return stats.toString();
-  }
-
-  /**
    * This JUnit 4 specific test method should be commented out or made private before building the program for
    * public release!
    * 
@@ -546,7 +531,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   public boolean isInitialStateOK() {
     return (this.stats != null && this.sentences == null && this.words == null && this.characters == null &&
         this.log == null && this.options == null && this.pattern == null && this.noOfLineTerminators == 0 &&
-        this.getFileDirectory() == null && this.getFileName() == null);
+        !this.isFilePathSet());
   }
 
   /**
@@ -559,10 +544,10 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @return a String containing the characters, words and sentences in a FileAnalyser object, in that order.
    */
   public String datStructPrint() {
-    String result = "";
-    for (char c : this.characters)  result += c + "\n";
-    for (String w : this.words)     result += w + "\n";
-    for (String s : this.sentences) result += s + "\n";
-    return result;
+    StringBuilder result = new StringBuilder(this.characters.length);
+    for (char c : this.characters)  result.append(c).append("\n");
+    for (String w : this.words)     result.append(w).append("\n");
+    for (String s : this.sentences) result.append(s).append("\n");
+    return result.toString();
   }
 }

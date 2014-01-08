@@ -19,15 +19,16 @@ public class ReqsTest {
   public void testS1() throws NullStringException {
     // Set up output for first file
     FileAnalyser fileAnalyser = new FileAnalyser();
-    fileAnalyser.setFileDirectory("src");
-    fileAnalyser.setFileName("test.txt");
+    //fileAnalyser.setFileDirectory("src");
+    //fileAnalyser.setFileName("test.txt");
+    fileAnalyser.setFilePath("test.txt");
     fileAnalyser.setOptions(new boolean[]{ false, false, false }, new String[]{null});
     fileAnalyser.process();
     // Please make sure datStructPrint() is not commented out before testing!
     System.out.println(fileAnalyser.datStructPrint());
     
     // Set up output for second file
-    fileAnalyser.setFileName("test2.txt");
+    fileAnalyser.setFilePath("test2.txt");
     fileAnalyser.process();
     System.out.println(fileAnalyser.datStructPrint());
   }

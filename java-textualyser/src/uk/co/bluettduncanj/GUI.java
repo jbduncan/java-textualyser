@@ -151,18 +151,11 @@ public class GUI {
     // Show the dialog
     int returnVal = chooser.showOpenDialog(this.frmMainWindow);
     
-    // If the user chose a file, identify it and get/set the needed information
+    // If the user chose a file, identify it, pass it to the file analyser and inform the user
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
-      
-      // Get and set the file's name and directory and set in the appropriate fields of the fileAnalyser.
-      String fileName = file.getName();
-      String fileDir = file.getParent();
-      GUI.this.fileAnalyser.setFileDirectory(fileDir);
-      GUI.this.fileAnalyser.setFileName(fileName);
-      
-      // Set the 'Choose file' text box to the file's absolute path.
-      this.txtChooseFile.setText(fileDir + File.separator + fileName);
+      GUI.this.fileAnalyser.setFilePath(file.getAbsolutePath());
+      this.txtChooseFile.setText(file.getAbsolutePath());
     }
   }
   

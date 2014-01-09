@@ -10,4 +10,4 @@ This is not a mature project. I am still learning how to best use Java practices
 License
 ================
 
-Java Textualyser is distributed under the MIT license. Please see LICENSE.txt for more details.
+Java Textualyser is distributed under the MIT license. Please see LICENCE.txt for more details.

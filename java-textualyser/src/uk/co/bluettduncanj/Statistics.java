@@ -312,7 +312,7 @@ public class Statistics {
     this.pattern = s.toString();
 
     // Search for the number of matches of the pattern against the body
-    BoyerMoore bm = new BoyerMoore(pattern, 256);
+    BoyerMooreStringMatcher bm = new BoyerMooreStringMatcher(pattern, 256);
     this.noOfTextOCs = bm.search(body);
   }
 

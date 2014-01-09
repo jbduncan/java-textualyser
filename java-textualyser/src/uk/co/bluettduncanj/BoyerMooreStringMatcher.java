@@ -6,12 +6,12 @@ package uk.co.bluettduncanj;
 
 
 /**
- * This is a variation of the BoyerMoore.java class found at algs4.cs.princeton.edu/53substring/BoyerMoore.java.html.
+ * This is a variation of the BoyerMoore class found at algs4.cs.princeton.edu/53substring/BoyerMoore.java.html.
  * This implementation only uses the Bad Character rule to enhance searching speeds.
  * 
  * @author Jonathan Bluett-Duncan
  */
-public class BoyerMoore {
+public class BoyerMooreStringMatcher {
 
   /** The bad-character skip array table */
   private int[] badCharTable;
@@ -25,7 +25,7 @@ public class BoyerMoore {
    * @param pattern: The pattern as a character array.
    * @param R: The alphabet size. If you're unsure of your alphabet size, use 256.
    */
-  public BoyerMoore(char[] pattern, int R) {
+  public BoyerMooreStringMatcher(char[] pattern, int R) {
     super();
  
     this.pattern = new char[pattern.length];
@@ -101,7 +101,9 @@ public class BoyerMoore {
    */
   public boolean patternEquals(String otherPattern) {
     StringBuilder s = new StringBuilder(this.pattern.length);
-    for (Character c : this.pattern) s.append(c);
+    for (Character c : this.pattern) {
+      s.append(c);
+    }
     return s.toString().equals(otherPattern);
   }
 }

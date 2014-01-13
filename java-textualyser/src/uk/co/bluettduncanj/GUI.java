@@ -86,7 +86,7 @@ public class GUI {
         this.chbxTextOCs.setEnabled(true);
         this.txtPattern.setEnabled(this.chbxTextOCs.isSelected());
 
-        break;
+      break;
       case ANALYSE_MODE:
 
         this.mntmAnalyse.setEnabled(false);
@@ -100,7 +100,7 @@ public class GUI {
         this.chbxTextOCs.setEnabled(false);
         this.txtPattern.setEnabled(false);
 
-        break;
+      break;
       default:
         // Do nothing
     }
@@ -136,7 +136,8 @@ public class GUI {
    * Behaves exactly as if the [x] on a window is clicked in normal applications.
    */
   private void close() {
-    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(this.frmMainWindow, WindowEvent.WINDOW_CLOSING));
+    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+        new WindowEvent(this.frmMainWindow, WindowEvent.WINDOW_CLOSING));
   }
 
   /**

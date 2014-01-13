@@ -4,6 +4,9 @@
 
 package uk.co.bluettduncanj;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * This is a variation of the BoyerMoore class found at algs4.cs.princeton.edu/53substring/BoyerMoore.java.html.
@@ -27,7 +30,17 @@ public class BoyerMooreStringMatcher {
    */
   public BoyerMooreStringMatcher(char[] pattern, int R) {
     super();
- 
+    init(pattern, R);
+  }
+
+  /**
+   * Common initialiser for constructors.
+   * 
+   * @param pattern: The pattern as a character array.
+   * @param R: The alphabet size.
+   */
+  private void init(char[] pattern, int R) {
+    
     this.pattern = new char[pattern.length];
     for (int j = 0; j < pattern.length; j++) {
       this.pattern[j] = pattern[j];

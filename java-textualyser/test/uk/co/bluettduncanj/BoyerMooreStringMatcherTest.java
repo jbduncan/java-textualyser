@@ -14,7 +14,7 @@ import uk.co.bluettduncanj.BoyerMooreStringMatcher;
 /**
  * @author Jonathan Bluett-Duncan
  */
-public class BoyerMooreTest {
+public class BoyerMooreStringMatcherTest {
 
   /**
    * Test method for {@link uk.co.bluettduncanj.BoyerMooreStringMatcher#BoyerMoore(char[], int)}.
@@ -23,6 +23,7 @@ public class BoyerMooreTest {
   public void testBoyerMoore() {
     int alphabetSize = 256;
     String pattern = "badhdgdcsgsretbafvwb";
+    String pattern2 = "abcdeghaadhg";
     
     BoyerMooreStringMatcher bm = new BoyerMooreStringMatcher(pattern.toCharArray(), alphabetSize);
     

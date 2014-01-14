@@ -4,9 +4,6 @@
 
 package uk.co.bluettduncanj;
 
-import java.util.HashSet;
-import java.util.Set;
-
 
 /**
  * This is a variation of the BoyerMoore class found at algs4.cs.princeton.edu/53substring/BoyerMoore.java.html.

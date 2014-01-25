@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluettduncanj.LogFileHandler;
+import uk.co.bluettduncanj.controller.LogFileHandler;
 
 
 /**
@@ -45,7 +45,7 @@ public class LogFileHandlerTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.LogFileHandler#LogFileHandler(java.lang.String, java.lang.String, java.lang.String)}.
+   * Test method for {@link uk.co.bluettduncanj.controller.LogFileHandler#LogFileHandler(java.lang.String, java.lang.String, java.lang.String)}.
    * @throws FileNotFoundException 
    */
   @Test

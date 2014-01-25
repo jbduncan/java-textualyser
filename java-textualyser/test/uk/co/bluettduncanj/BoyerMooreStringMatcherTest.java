@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import uk.co.bluettduncanj.BoyerMooreStringMatcher;
+import uk.co.bluettduncanj.controller.BoyerMooreStringMatcher;
 
 
 /**
@@ -17,7 +17,7 @@ import uk.co.bluettduncanj.BoyerMooreStringMatcher;
 public class BoyerMooreStringMatcherTest {
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.BoyerMooreStringMatcher#BoyerMoore(char[], int)}.
+   * Test method for {@link uk.co.bluettduncanj.controller.BoyerMooreStringMatcher#BoyerMoore(char[], int)}.
    */
   @Test
   public void testBoyerMoore() {
@@ -31,7 +31,7 @@ public class BoyerMooreStringMatcherTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.BoyerMooreStringMatcher#search(char[])}.
+   * Test method for {@link uk.co.bluettduncanj.controller.BoyerMooreStringMatcher#search(char[])}.
    */
   @Test
   public void testSearch() {

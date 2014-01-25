@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
-import uk.co.bluettduncanj.FileAnalyser;
+import uk.co.bluettduncanj.controller.FileAnalyser;
 
 
 /**

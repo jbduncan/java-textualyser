@@ -2,7 +2,7 @@
  * FileAnalyser.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
+
+import uk.co.bluettduncanj.model.Statistics;
 
 
 /**
@@ -104,7 +106,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * if options[2] (the option determining whether 'Text Occurrences' will be calculated) == true 
    * && args[0] (the pattern argument) == null.
    *
-   * @see uk.co.bluettduncanj.IFileAnalyser#setOptions(boolean[], java.lang.Object)
+   * @see uk.co.bluettduncanj.controller.IFileAnalyser#setOptions(boolean[], java.lang.Object)
    */
   public void setOptions(boolean[] options, String[] args) throws IllegalArgumentException {
     if (options.length != 3) {
@@ -135,7 +137,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @throws NullPointerException if the file path is not set.
    * @throws FileNotFoundException if the file does not exist or cannot be read.
    *
-   * @see uk.co.bluettduncanj.IFileAnalyser#process()
+   * @see uk.co.bluettduncanj.controller.IFileAnalyser#process()
    */
   @Override
   public void process() throws NullPointerException, FileNotFoundException {
@@ -500,7 +502,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
    * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter). 
    *
-   * @see uk.co.bluettduncanj.IFileAnalyser#saveLog()
+   * @see uk.co.bluettduncanj.controller.IFileAnalyser#saveLog()
    */
   @Override
   public void saveLog() throws NullPointerException, FileNotFoundException {

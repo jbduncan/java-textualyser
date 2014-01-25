@@ -2,7 +2,7 @@
  * Statistics.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
+
+import uk.co.bluettduncanj.controller.BoyerMooreStringMatcher;
 
 
 /**

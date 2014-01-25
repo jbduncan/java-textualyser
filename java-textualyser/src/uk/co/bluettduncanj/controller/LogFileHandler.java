@@ -2,7 +2,7 @@
  * LogFileHandler.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.controller;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

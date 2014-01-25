@@ -12,9 +12,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluettduncanj.AbstractFileHandler;
-import uk.co.bluettduncanj.FileAnalyser;
-import uk.co.bluettduncanj.LogFileHandler;
+import uk.co.bluettduncanj.controller.AbstractFileHandler;
+import uk.co.bluettduncanj.controller.FileAnalyser;
+import uk.co.bluettduncanj.controller.LogFileHandler;
 
 
 /**
@@ -52,7 +52,7 @@ public class AbstractFileHandlerTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.AbstractFileHandler#AbstractFileHandler()}.
+   * Test method for {@link uk.co.bluettduncanj.controller.AbstractFileHandler#AbstractFileHandler()}.
    */
   @Test
   public void testAbstractFileHandler() {

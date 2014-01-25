@@ -2,10 +2,9 @@
  * GUI.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.view;
 
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -38,17 +37,20 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import uk.co.bluettduncanj.controller.FileAnalyser;
+import uk.co.bluettduncanj.controller.IFileAnalyser;
+
 /**
+ * The main window representing the desktop Graphical User Interface (GUI) of the program.
+ * 
  * @author Jonathan Bluett-Duncan
  */
 public class GUI {
   
-  // TODO: Put the various parts of this program into model, view and controller sub-packages.
-  // Also consider moving the main method in this class into a Main or Application class
-  // in the base uk.co.bluettduncanj package.
-  
   // TODO: Add a 'Licence' option to the 'File' menu that opens a new window with a scrolling rich text box 
   // holding the licence agreement.
+  
+  // TODO: Re-implement the GUI in GridBagLayout.
   
   // TODO: Consider externalising the strings in this class and Statistics (after all TODOs are done).
 
@@ -392,23 +394,11 @@ public class GUI {
         && this.chbxFreqs != null && this.chbxSaveLogFile != null && this.chbxTextOCs != null && this.lblAnalyseStatus != null
         && this.txtAreaStatsOutput != null && this.txtChooseFile != null && this.txtPattern != null);
   }
-
+  
   /**
-   * Launch the application.
+   * Show the window.
    */
-  public static void main(String[] args) {
-    EventQueue.invokeLater(new Runnable() {
-
-      @Override
-      public void run() {
-        try {
-          GUI window = new GUI();
-          window.frmMainWindow.setVisible(true);
-        }
-        catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
+  public void show() {
+    frmMainWindow.setVisible(true);
   }
 }

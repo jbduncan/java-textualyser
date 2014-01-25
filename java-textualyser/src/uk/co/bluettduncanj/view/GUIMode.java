@@ -2,7 +2,7 @@
  * GUIMode.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.view;
 
 
 /**

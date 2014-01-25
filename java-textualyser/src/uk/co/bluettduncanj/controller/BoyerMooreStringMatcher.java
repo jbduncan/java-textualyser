@@ -2,7 +2,7 @@
  * BoyerMoore.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.controller;
 
 
 /**

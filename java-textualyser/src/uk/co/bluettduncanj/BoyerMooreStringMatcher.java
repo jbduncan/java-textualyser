@@ -12,6 +12,8 @@ package uk.co.bluettduncanj;
  * @author Jonathan Bluett-Duncan
  */
 public class BoyerMooreStringMatcher {
+  
+  // TODO: Improve the running speed of this algorithm by implementing other optimisations.
 
   /** The bad-character skip array table */
   private int[] badCharTable;

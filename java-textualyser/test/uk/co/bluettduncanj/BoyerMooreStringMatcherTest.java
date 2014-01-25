@@ -23,8 +23,6 @@ public class BoyerMooreStringMatcherTest {
   public void testBoyerMoore() {
     int alphabetSize = 256;
     String pattern = "badhdgdcsgsretbafvwb";
-    String pattern2 = "abcdeghaadhg";
-    
     BoyerMooreStringMatcher bm = new BoyerMooreStringMatcher(pattern.toCharArray(), alphabetSize);
     
     // Make sure the patternEquals and getBadCharTableSize methods are not commented out before testing!

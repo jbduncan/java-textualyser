@@ -42,6 +42,15 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
  * @author Jonathan Bluett-Duncan
  */
 public class GUI {
+  
+  // TODO: Put the various parts of this program into model, view and controller sub-packages.
+  // Also consider moving the main method in this class into a Main or Application class
+  // in the base uk.co.bluettduncanj package.
+  
+  // TODO: Add a 'Licence' option to the 'File' menu that opens a new window with a scrolling rich text box 
+  // holding the licence agreement.
+  
+  // TODO: Consider externalising the strings in this class and Statistics.
 
   private IFileAnalyser fileAnalyser;
 
@@ -58,7 +67,7 @@ public class GUI {
   private JTextArea     txtAreaStatsOutput;
   private JMenuItem     mntmAnalyse;
   private JMenu         mnFile;
-  private JMenuItem     mntmQuit;
+  private JMenuItem     mntmExit;
   private JMenuItem     mntmChooseAFile;
 
   /**
@@ -355,19 +364,8 @@ public class GUI {
     this.mnFile.setEnabled(true);
     menuBar.add(this.mnFile);
 
-    this.mntmChooseAFile = new JMenuItem("Choose a file...");
-    this.mntmChooseAFile.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        GUI.this.chooseFile();
-      }
-
-    });
-    this.mnFile.add(this.mntmChooseAFile);
-
-    this.mntmQuit = new JMenuItem("Quit");
-    this.mntmQuit.addActionListener(new ActionListener() {
+    this.mntmExit = new JMenuItem("Exit");
+    this.mntmExit.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -375,18 +373,7 @@ public class GUI {
       }
 
     });
-
-    this.mntmAnalyse = new JMenuItem("Analyse");
-    this.mntmAnalyse.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        GUI.this.doFileAnalysis();
-      }
-
-    });
-    this.mnFile.add(this.mntmAnalyse);
-    this.mnFile.add(this.mntmQuit);
+    this.mnFile.add(this.mntmExit);
 
     this.frmMainWindow.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { this.txtChooseFile, this.btnChooseFile,
         this.chbxSaveLogFile, pnlOptions, this.chbxAvgLens, this.chbxFreqs, this.chbxTextOCs, this.txtPattern, this.btnAnalyse,

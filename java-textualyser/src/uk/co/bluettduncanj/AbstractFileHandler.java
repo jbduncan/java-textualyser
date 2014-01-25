@@ -88,13 +88,31 @@ public abstract class AbstractFileHandler {
   }
   
   /**
-   * Checks whether the file at the file path given through setFilePath(String) exists and can be read.
+   * Checks whether the file at the file path given through setFilePath(String) exists.
    * 
    * @return true if the file exists and can be read, otherwise false.
    */
-  public boolean fileExistsAndReadable() {
+  public boolean fileExists() {
+    if (this.file == null)
+      return false;
     try {
       return this.file.exists();
+    }
+    catch (SecurityException e) {
+      return false;
+    }
+  }
+  
+  /**
+   * Checks whether the file at the file path given through setFilePath(String) exists.
+   * 
+   * @return true if the file exists and can be read, otherwise false.
+   */
+  public boolean fileReadable() {
+    if (this.file == null)
+      return false;
+    try {
+      return this.file.canRead();
     }
     catch (SecurityException e) {
       return false;

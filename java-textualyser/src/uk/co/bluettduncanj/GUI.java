@@ -50,7 +50,7 @@ public class GUI {
   // TODO: Add a 'Licence' option to the 'File' menu that opens a new window with a scrolling rich text box 
   // holding the licence agreement.
   
-  // TODO: Consider externalising the strings in this class and Statistics.
+  // TODO: Consider externalising the strings in this class and Statistics (after all TODOs are done).
 
   private IFileAnalyser fileAnalyser;
 

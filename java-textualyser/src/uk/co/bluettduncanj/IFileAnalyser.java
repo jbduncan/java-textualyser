@@ -15,6 +15,12 @@ import java.io.FileNotFoundException;
  */
 public interface IFileAnalyser {
   
+  // TODO: Make comments here (inc. class description) less verbose 
+  // (see implementations in FileAnalyser for more concise descriptions).
+  
+  // TODO: Change interface (and rest of program) so that it doesn't have setFilePath() and setOptions() [move
+  // those to the constructor instead].
+  
   /**
    * setFilePath(String) defines the condition that all file analysers must be able to 
    * use file paths to identify text files and their locations on the file system.

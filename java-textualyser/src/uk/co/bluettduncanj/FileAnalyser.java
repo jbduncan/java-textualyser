@@ -157,9 +157,12 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
       throw new NullPointerException("File path is not set.");
     }
     
-    // Check whether the file at the given file path can be found
-    if (!this.fileExistsAndReadable()) {
+    if (!this.fileExists()) {
       throw new FileNotFoundException("File cannot be found.");
+    }
+    
+    if (!this.fileReadable()) {
+      throw new FileNotFoundException("File cannot be read.");
     }
     
     this.parseChars();

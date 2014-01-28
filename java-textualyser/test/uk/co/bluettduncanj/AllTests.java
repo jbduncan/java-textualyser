@@ -14,7 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ AbstractFileHandlerTest.class, BoyerMooreStringMatcherTest.class, FileAnalyserTest.class, GUITest.class,
-    LogFileHandlerTest.class, ReqsTest.class, StatisticsTest.class })
+    LogFileHandlerTest.class, OtherRequirementsTest.class, StatisticsTest.class })
 public class AllTests {
 
 }

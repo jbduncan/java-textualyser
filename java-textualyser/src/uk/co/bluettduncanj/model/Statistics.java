@@ -7,9 +7,9 @@ package uk.co.bluettduncanj.model;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import uk.co.bluettduncanj.controller.BoyerMooreStringMatcher;
@@ -131,9 +131,13 @@ public class Statistics {
    */
   public void calcCharFreq(char[] characters) {
     
-    // Use a Map implementation that will keep Character keys in order
-    this.charFreq = new TreeMap<Character, Double>();
     int size = characters.length; // Keep track of size of characters
+    
+    // Use a Map implementation that will keep Character keys in order
+    this.charFreq = new HashMap<Character, Double>(size);
+    
+    // TODO: Consider using a BoyerMooreStringMatcher here...
+    
     double charCount = 0.0; // Keep track of the number of times a particular character appears in characters
     for (char c : characters) {
       

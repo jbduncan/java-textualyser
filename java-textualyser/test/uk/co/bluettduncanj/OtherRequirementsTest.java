@@ -14,10 +14,10 @@ import uk.co.bluettduncanj.controller.FileAnalyser;
 /**
  * @author Jonathan Bluett-Duncan
  */
-public class ReqsTest {
+public class OtherRequirementsTest {
 
   @Test
-  public void testS1() throws NullPointerException, FileNotFoundException {
+  public void testRequirementS1() throws NullPointerException, FileNotFoundException {
     
     // Set up output for first file
     FileAnalyser fileAnalyser = new FileAnalyser();

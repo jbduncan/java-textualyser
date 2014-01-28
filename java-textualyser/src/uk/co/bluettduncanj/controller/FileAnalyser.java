@@ -29,11 +29,21 @@ import uk.co.bluettduncanj.model.Statistics;
  */
 public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   
-  // TODO: Change parseChars() to readFile(), and improve implementation if possible.
-  // TODO: In parse(), parallelise the calls to the parseWords() and parseSentences() operations, either using separate Threads or ForkJoinTasks.
+  // TODO: Move a good deal of the state here, e.g. characters, sentences, words, noOfLineTerminators, pattern, 
+  // punctuationCompiled etc, into its own model e.g. FileHandler. Change tests accordingly.
+  //
+  // TODO: Consider re-naming this class to Parser or Analyser. Therefore change the interface name accordingly.
+  //
+  // TODO: Change parseChars() to readFile(), think about re-implementing it without noOfLineTerminators, 
+  // improve code implementation and presentation if possible, and finally change relevant test accordingly (i.e..
+  //
+  // TODO: In parse(), parallelise the calls to the parseWords() and parseSentences() operations using separate Threads.
+  //
   // TODO: Re-implement parseWords() and parseSentences() operations to not read from file again.
+  //
   // TODO: Re-implement parseWords() and parseSentences() so they don't store words and sentences, and instead calculate and pass
   // statistics straight to the Statistics object.
+  //
   // TODO: Consider implementing char[] characters as an Inverted Index (see Information Retrieval notes).
   
   /** List of sentences parsed from the text file */
@@ -125,6 +135,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     this.options = options;
     
     if (options[2] == true) {
+      
       // Extract the pattern
       this.pattern = args[0];
     }

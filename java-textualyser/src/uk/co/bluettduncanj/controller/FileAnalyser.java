@@ -30,12 +30,19 @@ import uk.co.bluettduncanj.model.Statistics;
 public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   
   // TODO: Move a good deal of the state here, e.g. characters, sentences, words, noOfLineTerminators, pattern, 
-  // punctuationCompiled etc, into its own model e.g. FileHandler. Change tests accordingly.
+  // punctuationCompiled etc, into its own model e.g. FileReader. Move relevant methods e.g. parseChars()/readFile() to 
+  // FileReader. Change tests accordingly.
+  //
+  // TODO: Verify the given file name in FileReader. Change tests accordingly.
   //
   // TODO: Consider re-naming this class to Parser or Analyser. Therefore change the interface name accordingly.
   //
+  // TODO: Consider re-naming LogFileHandler to LogFileWriter. In GUI, give the user the option to choose a file location
+  // through a JFileChooser. Change tests accordingly?
+  //
   // TODO: Change parseChars() to readFile(), think about re-implementing it without noOfLineTerminators, 
-  // improve code implementation and presentation if possible, and finally change relevant test accordingly (i.e..
+  // improve code implementation and presentation if possible, and finally change relevant test accordingly (i.e., for a 
+  // Windows text file, interpret \r\n as two characters rather than one).
   //
   // TODO: In parse(), parallelise the calls to the parseWords() and parseSentences() operations using separate Threads.
   //
@@ -112,7 +119,7 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @param options: The three-element size boolean array of options that determines custom analysis output.
    * @param args: String arguments that should contain a text pattern in its first index.
    * 
-   * @throws IllegalArgumentExceptionif options is not exactly 3 indexes long (options.length != 3), or 
+   * @throws IllegalArgumentException if options is not exactly 3 indices long (options.length != 3), or 
    * if options[2] (the option determining whether 'Text Occurrences' will be calculated) == true 
    * && args[0] (the pattern argument) == null.
    *
@@ -442,6 +449,15 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     
     // Initialise the line terminator counter
     this.noOfLineTerminators = 0;
+    
+    // TODO: Change tokens to a StringBuilder to add characters. Since List<Character> are inefficient structures, 
+    // this will make the process less resource-intensive. And most importantly, it will be easy then to convert it to a char[], 
+    // using an operation like tokens.toString().toCharArray();
+    
+    // TODO: Change the operation below by making tokens a StringBuilder, and then converting it to a String to
+    // store in this.characters, where this.characters is re-implemented as a String object.
+    // This will make everything more code-friendly and efficient, since List<Character> structures are inefficient
+    // and potential performance differences between Strings and char[]s of Unicode characters should not matter.
     
     // Use a List<Character> for easy adding of char elements
     List<Character> tokens = new ArrayList<Character>();

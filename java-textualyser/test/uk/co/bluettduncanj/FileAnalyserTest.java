@@ -10,11 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluettduncanj.FileAnalyser;
+import uk.co.bluettduncanj.controller.FileAnalyser;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class FileAnalyserTest {
   
@@ -25,7 +25,7 @@ public class FileAnalyserTest {
    */
   @Before
   public void setUp() throws Exception {
-    fileAnalyser = FileAnalyser.getInstance();
+    fileAnalyser = new FileAnalyser();
   }
 
   /**
@@ -37,11 +37,11 @@ public class FileAnalyserTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.FileAnalyser#getInstance()}.
+   * Test method for {@link uk.co.bluettduncanj.controller.FileAnalyser#getInstance()}.
    */
   @Test
-  public void testGetInstance() {
-    assertNotNull("getInstance() returns null.", fileAnalyser);
+  public void testFileAnalyser() {
+    assertNotNull("Instance is null.", fileAnalyser);
     // Make sure the isInitialStateOK method is not commented out before testing!
     assertEquals("fileAnalyser internal state not properly set.", true, fileAnalyser.isInitialStateOK());
   }

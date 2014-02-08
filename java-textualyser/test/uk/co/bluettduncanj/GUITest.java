@@ -10,11 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluettduncanj.GUI;
+import uk.co.bluettduncanj.view.GUI;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class GUITest {
   
@@ -37,7 +37,7 @@ public class GUITest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.GUI#GUI()}.
+   * Test method for {@link uk.co.bluettduncanj.view.GUI#GUI()}.
    */
   @Test
   public void testGUI() {

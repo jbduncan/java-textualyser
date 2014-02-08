@@ -2,15 +2,17 @@
  * Statistics.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
+
+import uk.co.bluettduncanj.controller.BoyerMooreStringMatcher;
 
 
 /**
@@ -20,7 +22,7 @@ import java.util.regex.Pattern;
  * It contains various methods which calculate different sorts of statistics, depending on the needs of a FileAnalyser object.
  * It also contains a method to return the statistics as a human-readable String [toString()].
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class Statistics {
   
@@ -129,9 +131,13 @@ public class Statistics {
    */
   public void calcCharFreq(char[] characters) {
     
-    // Use a Map implementation that will keep Character keys in order
-    this.charFreq = new TreeMap<Character, Double>();
     int size = characters.length; // Keep track of size of characters
+    
+    // Use a Map implementation that will keep Character keys in order
+    this.charFreq = new HashMap<Character, Double>(size);
+    
+    // TODO: Consider using a BoyerMooreStringMatcher here...
+    
     double charCount = 0.0; // Keep track of the number of times a particular character appears in characters
     for (char c : characters) {
       
@@ -312,7 +318,7 @@ public class Statistics {
     this.pattern = s.toString();
 
     // Search for the number of matches of the pattern against the body
-    BoyerMoore bm = new BoyerMoore(pattern, 256);
+    BoyerMooreStringMatcher bm = new BoyerMooreStringMatcher(pattern, 256);
     this.noOfTextOCs = bm.search(body);
   }
 

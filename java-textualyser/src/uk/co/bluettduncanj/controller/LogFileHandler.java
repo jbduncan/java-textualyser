@@ -2,7 +2,7 @@
  * LogFileHandler.java
  */
 
-package uk.co.bluettduncanj;
+package uk.co.bluettduncanj.controller;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  * component is to save the statistical results of a Statistics object to an appropriately named log file,
  * in the same directory as the text file whose statistics have been calculated.
  * 
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class LogFileHandler extends AbstractFileHandler {
   
@@ -26,10 +26,9 @@ public class LogFileHandler extends AbstractFileHandler {
   /**
    * Parameterised constructor - Initialises state to parameter data
    */
-  public LogFileHandler(String fileName, String fileDir, String logString) {
+  public LogFileHandler(String filePath, String logString) {
     super();
-    this.setFileName(fileName);
-    this.setFileDirectory(fileDir);
+    this.setFilePath(filePath);
     this.logString = logString;
   }
   
@@ -41,17 +40,17 @@ public class LogFileHandler extends AbstractFileHandler {
    * 
    * If the log file already exists and contains data, it will be overwritten with the new log String.
    * 
-   * @throws FileNotFoundException: This will be thrown if the file path "does not denote an existing, writable 
+   * @throws FileNotFoundException if the file path "does not denote an existing, writable 
    * regular file and a new regular file of that name cannot be created, or if some other error occurs while 
    * opening or creating the file" (see the throws definition for FileNotFoundException in java.io.PrintWriter).
    */
   public void save() throws FileNotFoundException {
-    PrintWriter write = new PrintWriter(this.getFilePath());
+    PrintWriter writer = new PrintWriter(this.getFilePath());
     
     // Print the log string to the file
-    write.print(this.logString);
-    write.flush();
-    write.close();
+    writer.print(this.logString);
+    writer.flush();
+    writer.close();
   }
 
   /**
@@ -60,11 +59,11 @@ public class LogFileHandler extends AbstractFileHandler {
    * 
    * This method allows JUnit tests to be run on the internal state of a LogFileHandler object.
    * 
-   * @param otherLogString: The string to compare to the contents of this LogFileHandler object's log file.
+   * @param otherString: The string to compare to the contents of this LogFileHandler object's log file.
    * 
    * @return true if the two Strings are equal, otherwise false.
    */
-  public boolean logStringEquals(String otherLogString) {
-    return this.logString.equals(otherLogString);
+  public boolean logStringEquals(String otherString) {
+    return this.logString.equals(otherString);
   }
 }

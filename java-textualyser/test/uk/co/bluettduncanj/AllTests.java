@@ -10,11 +10,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 /**
- * @author Jonathan
+ * @author Jonathan Bluett-Duncan
  */
 @RunWith(Suite.class)
-@SuiteClasses({ AbstractFileHandlerTest.class, BoyerMooreTest.class, FileAnalyserTest.class, GUITest.class,
-    LogFileHandlerTest.class, ReqsTest.class, StatisticsTest.class })
+@SuiteClasses({ AbstractFileHandlerTest.class, BoyerMooreStringMatcherTest.class, FileAnalyserTest.class, GUITest.class,
+    LogFileHandlerTest.class, OtherRequirementsTest.class, StatisticsTest.class })
 public class AllTests {
 
 }

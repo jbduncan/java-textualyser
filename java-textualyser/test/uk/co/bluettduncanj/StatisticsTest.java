@@ -13,11 +13,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.bluettduncanj.Statistics;
+import uk.co.bluettduncanj.model.Statistics;
 
 
 /**
- * @author jb00359
+ * @author Jonathan Bluett-Duncan
  */
 public class StatisticsTest {
   
@@ -129,7 +129,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#Statistics()}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#Statistics()}.
    */
   @Test
   public void testStatistics() {
@@ -139,7 +139,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#reset()}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#reset()}.
    */
   @Test
   public void testReset() {
@@ -151,7 +151,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcCharFreq(char[])}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcCharFreq(char[])}.
    */
   @Test
   public void testCalcCharFreq() {
@@ -174,7 +174,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcAvgSentenceLen(java.util.List)}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcAvgSentenceLen(java.util.List)}.
    */
   @Test
   public void testCalcAvgSentenceLen() {
@@ -182,7 +182,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcAvgWordLen(java.util.List)}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcAvgWordLen(java.util.List)}.
    */
   @Test
   public void testCalcAvgWordLen() {
@@ -190,7 +190,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcNoOfEnglishANs(char[])}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcNoOfEnglishANs(char[])}.
    */
   @Test
   public void testCalcNoOfEnglishANs() {
@@ -198,7 +198,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcNoOfNonANs(char[])}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcNoOfNonANs(char[])}.
    */
   @Test
   public void testCalcNoOfNonANs() {
@@ -206,7 +206,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcNoOfWhitespaces(char[], int)}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcNoOfWhitespaces(char[], int)}.
    */
   @Test
   public void testCalcNoOfWhitespaces() {
@@ -214,7 +214,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#isWhitespace(char)}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#isWhitespace(char)}.
    */
   @Test
   public void testIsWhitespace() {
@@ -222,7 +222,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcNoOfIntlChars(char[])}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcNoOfIntlChars(char[])}.
    */
   @Test
   public void testCalcNoOfIntlChars() {
@@ -230,7 +230,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcNoOfSuffixes(java.util.List)}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcNoOfSuffixes(java.util.List)}.
    */
   @Test
   public void testCalcNoOfSuffixes() {
@@ -238,7 +238,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#calcNoOfTextOCs(char[], char[])}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#calcNoOfTextOCs(char[], char[])}.
    */
   @Test
   public void testCalcNoOfTextOCs() {
@@ -246,7 +246,7 @@ public class StatisticsTest {
   }
 
   /**
-   * Test method for {@link uk.co.bluettduncanj.Statistics#toString()}.
+   * Test method for {@link uk.co.bluettduncanj.model.Statistics#toString()}.
    */
   @Test
   public void testToString() {

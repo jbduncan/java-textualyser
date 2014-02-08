@@ -14,6 +14,8 @@ import uk.co.bluettduncanj.view.GUI;
  */
 public class Application {
   
+  // TODO: Implement java-textualyser from scratch as a new version, using TODOs littered throughout this project's source code files.
+  
   /**
    * Launch the application.
    */

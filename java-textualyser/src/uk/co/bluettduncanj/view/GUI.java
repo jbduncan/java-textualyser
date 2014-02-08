@@ -41,7 +41,7 @@ import uk.co.bluettduncanj.controller.FileAnalyser;
 import uk.co.bluettduncanj.controller.IFileAnalyser;
 
 /**
- * The main window of the program's desktop Graphical User Interface (GUI).
+ * The main window representing the desktop Graphical User Interface (GUI) of the program.
  * 
  * @author Jonathan Bluett-Duncan
  */
@@ -67,8 +67,10 @@ public class GUI {
   private JCheckBox     chbxFreqs;
   private JCheckBox     chbxSaveLogFile;
   private JTextArea     txtAreaStatsOutput;
+  private JMenuItem     mntmAnalyse;
   private JMenu         mnFile;
   private JMenuItem     mntmExit;
+  private JMenuItem     mntmChooseAFile;
 
   /**
    * Create the application.
@@ -84,6 +86,8 @@ public class GUI {
     switch (mode) {
       case DEFAULT_MODE:
 
+        this.mntmAnalyse.setEnabled(true);
+        this.mntmChooseAFile.setEnabled(true);
         this.lblAnalyseStatus.setVisible(false);
         this.btnAnalyse.setEnabled(true);
         this.btnChooseFile.setEnabled(true);
@@ -96,6 +100,8 @@ public class GUI {
       break;
       case ANALYSE_MODE:
 
+        this.mntmAnalyse.setEnabled(false);
+        this.mntmChooseAFile.setEnabled(false);
         this.lblAnalyseStatus.setVisible(true);
         this.btnAnalyse.setEnabled(false);
         this.btnChooseFile.setEnabled(false);

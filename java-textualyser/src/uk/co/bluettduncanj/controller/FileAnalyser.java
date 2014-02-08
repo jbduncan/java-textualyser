@@ -6,12 +6,9 @@ package uk.co.bluettduncanj.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -62,8 +59,8 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   /** List of words parsed from the text file */
   private List<String> words;
   
-  /** The contents read from the text file */
-  private String characters;
+  /** Array of all characters in the text file */
+  private char[] characters;
   
   /** Object that analyses sentences, words and characters to calculate statistics */
   private Statistics stats;
@@ -451,39 +448,43 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
   private void parseChars() {
     
     // Initialise the line terminator counter
-    noOfLineTerminators = 0;
+    this.noOfLineTerminators = 0;
     
-    // Use a StringBuilder for easy adding of char elements
-    StringBuilder tokens = new StringBuilder();
-    BufferedReader reader = null;
-    Charset encoding = (Charset.isSupported("UTF-8") ? Charset.forName("UTF-8") : Charset.defaultCharset());
+    // TODO: Change tokens to a StringBuilder to add characters. Since List<Character> are inefficient structures, 
+    // this will make the process less resource-intensive. And most importantly, it will be easy then to convert it to a char[], 
+    // using an operation like tokens.toString().toCharArray();
+    
+    // TODO: Change the operation below by making tokens a StringBuilder, and then converting it to a String to
+    // store in this.characters, where this.characters is re-implemented as a String object.
+    // This will make everything more code-friendly and efficient, since List<Character> structures are inefficient
+    // and potential performance differences between Strings and char[]s of Unicode characters should not matter.
+    
+    // Use a List<Character> for easy adding of char elements
+    List<Character> tokens = new ArrayList<Character>();
+    BufferedReader reader;
     
     // Attempt to read the file
     try {
-      reader = new BufferedReader(new InputStreamReader(new FileInputStream(getFilePath()), encoding));
-      int r;
-      while ((r = reader.read()) != -1) {
-        tokens.append((char) r);
-      }
+      reader = new BufferedReader(new FileReader(this.getFilePath()));
+      String line;
+      
+      // Add the character contents of each line to the character tokens
+      while ((line = reader.readLine()) != null) {
+        for (char c : line.toCharArray()) tokens.add(c);
+        
+        // Note: I want line terminators to count as whitespaces. Therefore I keep a counter that counts the number of lines,
+        // and therefore the number of line terminators, which will be stored in a class field for later use
+        // by Statistics.calcNoOfWhitespaces(char[], int).
+        this.noOfLineTerminators++;
+      }  
     }
     catch (IOException e) {
-      // TODO: Move responsibility of handling this sort of exception up to the user interface.
-      
+      e.printStackTrace();
       JOptionPane.showMessageDialog(null, FileAnalyser.FileIOErrorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
-    }
-    finally {
-      if (reader != null) {
-        try {
-          reader.close();
-        }
-        catch (IOException e) {
-          JOptionPane.showMessageDialog(null, FileAnalyser.FileIOErrorMessage, "File I/O Error", JOptionPane.ERROR_MESSAGE);
-        }
-      }
     }
     
     // Convert the List<Character> of tokens to a char array to be stored for later use
-    characters = tokens.toString();
+    this.characters = this.toCharArray(tokens);
   }
 
   /**
@@ -502,17 +503,16 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
     
     // Choose whether to analyse 'Frequencies' statistics or not (see Javadoc for setOptions(...))
     if (options[1] == true) {
-      char[] chars = this.characters.toCharArray();
-      this.stats.calcCharFreq(chars);
-      this.stats.calcNoOfEnglishANs(chars);
-      this.stats.calcNoOfNonANs(chars);
-      this.stats.calcNoOfWhitespaces(chars, this.noOfLineTerminators);
-      this.stats.calcNoOfIntlChars(chars);
+      this.stats.calcCharFreq(this.characters);
+      this.stats.calcNoOfEnglishANs(this.characters);
+      this.stats.calcNoOfNonANs(this.characters);
+      this.stats.calcNoOfWhitespaces(this.characters, this.noOfLineTerminators);
+      this.stats.calcNoOfIntlChars(this.characters);
       this.stats.calcNoOfSuffixes(this.words);
     }
     
     // Choose whether to analyse the 'Text Occurrences' statistic or not (see Javadoc for setOptions(...))
-    if (options[2] == true) this.stats.calcNoOfTextOCs(this.characters.toCharArray(), this.pattern.toCharArray());
+    if (options[2] == true) this.stats.calcNoOfTextOCs(this.characters, this.pattern.toCharArray());
   }
 
   /**
@@ -594,10 +594,10 @@ public class FileAnalyser extends AbstractFileHandler implements IFileAnalyser {
    * @return a String containing the characters, words and sentences in a FileAnalyser object, in that order.
    */
   public String datStructPrint() {
-    StringBuilder result = new StringBuilder(this.characters.length());
-    for (char c : this.characters.toCharArray())  result.append(c).append("\n");
-    for (String w : this.words)                   result.append(w).append("\n");
-    for (String s : this.sentences)               result.append(s).append("\n");
+    StringBuilder result = new StringBuilder(this.characters.length);
+    for (char c : this.characters)  result.append(c).append("\n");
+    for (String w : this.words)     result.append(w).append("\n");
+    for (String s : this.sentences) result.append(s).append("\n");
     return result.toString();
   }
 }

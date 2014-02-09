@@ -21,6 +21,8 @@ public interface IFileAnalyser {
   // TODO: Change interface (and rest of program) so that it doesn't have setFilePath() and setOptions() [move
   // those to the constructor instead].
   
+  // TODO: Consider using 'Object...' varargs notation for setOptions().
+  
   /**
    * setFilePath(String) defines the condition that all file analysers must be able to 
    * use file paths to identify text files and their locations on the file system.

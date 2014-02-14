@@ -1,5 +1,5 @@
 /**
- * SentenceStateContext.java
+ * SentenceAnalyserFSM.java
  */
 
 package uk.co.bluettduncanj.model;

@@ -1,5 +1,5 @@
 /**
- * AppendToSentenceState.java
+ * ExistingSentenceState.java
  */
 
 package uk.co.bluettduncanj.model;

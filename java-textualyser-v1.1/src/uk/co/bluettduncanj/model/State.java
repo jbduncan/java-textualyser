@@ -1,5 +1,5 @@
 /**
- * ParseState.java
+ * State.java
  */
 
 package uk.co.bluettduncanj.model;

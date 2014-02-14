@@ -1,5 +1,5 @@
 /**
- * StateContext.java
+ * FiniteStateMachine.java
  */
 
 package uk.co.bluettduncanj.model;

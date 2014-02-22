@@ -1,5 +1,5 @@
 /**
- * WordAnalyserFSM.java
+ * WordStateMachine.java
  */
 
 package uk.co.bluettduncanj.model;
@@ -8,6 +8,6 @@ package uk.co.bluettduncanj.model;
 /**
  * @author Jonathan Bluett-Duncan
  */
-public class WordAnalyserFSM {
+public class WordStateMachine {
 
 }

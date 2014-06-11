@@ -173,10 +173,15 @@ public class GUI {
         // Do analysis...
 
         // Pass user-defined options to the FileAnalyser
-        boolean[] options = new boolean[3];
-        options[0] = GUI.this.chbxAvgLens.isSelected();
-        options[1] = GUI.this.chbxFreqs.isSelected();
-        options[2] = GUI.this.chbxTextOCs.isSelected();
+        //boolean[] options = new boolean[3];
+        //options[0] = GUI.this.chbxAvgLens.isSelected();
+        //options[1] = GUI.this.chbxFreqs.isSelected();
+        //options[2] = GUI.this.chbxTextOCs.isSelected();
+        boolean[] options = new boolean[] { 
+            GUI.this.chbxAvgLens.isSelected(),
+            GUI.this.chbxFreqs.isSelected(), 
+            GUI.this.chbxTextOCs.isSelected()
+        };
 
         String[] pattern = new String[] { GUI.this.txtPattern.getText() };
 
@@ -205,7 +210,8 @@ public class GUI {
           e.printStackTrace();
         }
         catch (FileNotFoundException e) {
-          String message = "Sorry, there was an error creating the log file. Log file creation has been abandoned.";
+          String message = "Sorry, there was an error creating the log file. Do you have permission to create new files "
+              + "in this location?";
           JOptionPane.showMessageDialog(GUI.this.frmMainWindow, message, "Log file error", JOptionPane.ERROR_MESSAGE);
 
           // Developer error message

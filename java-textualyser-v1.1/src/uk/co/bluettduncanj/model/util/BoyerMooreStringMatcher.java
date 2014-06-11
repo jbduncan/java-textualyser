@@ -2,7 +2,7 @@
  * BoyerMooreStringMatcher.java
  */
 
-package uk.co.bluettduncanj.model;
+package uk.co.bluettduncanj.model.util;
 
 
 /**

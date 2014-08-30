@@ -6,7 +6,7 @@ package uk.co.bluettduncanj.controller;
 
 
 /**
- * @author Jonathan
+ * @author Jonathan Bluett-Duncan
  */
 public class Analyser {
 

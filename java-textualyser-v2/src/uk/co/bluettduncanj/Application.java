@@ -42,11 +42,12 @@ public class Application {
   }
   
   /**
-   * Show a dialog containing the stack trace of Throwable <code>e</code>.
-   * The stack trace printed is exactly the same as if calling the Throwable's 
+   * Show a graphical dialog showing the stack trace of <tt>Throwable</tt> <tt>e</tt>.
+   * The stack trace printed is exactly the same as if calling the <tt>Throwable</tt>'s 
    * {@link Throwable#printStackTrace() printStackTrace()} method.
    * 
-   * @param e - the Throwable whose stack trace is to be shown on the dialog.
+   * @param e
+   *          The <tt>Throwable</tt> whose stack trace is to be shown on the dialog.
    */
   private static void showStackTraceDialog(Throwable e) {
     StringWriter sw = new StringWriter();

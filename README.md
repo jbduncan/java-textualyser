@@ -7,7 +7,7 @@ This project originated as a piece of coursework that I did during my Computer S
 
 This is not a mature project. I am still learning how to best use Java practices to improve this program, so it is by no means guaranteed to be bug-free.
 
-License
+Licence
 ================
 
-Java Textualyser is distributed under the permissive MIT licence. Please see LICENCE.txt for more details.
+This software is distributed under the permissive MIT licence (see LICENCE.txt) and uses third party libraries distributed under their own terms (see LICENCE-3RD-PARTY.txt).

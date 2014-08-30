@@ -81,7 +81,7 @@ public class BoyerMooreStringMatcher {
       if (skip == 0) { 
         // Match found!
         matchesFound++;
-        i++;
+        skip = 1;
       }
     }
       

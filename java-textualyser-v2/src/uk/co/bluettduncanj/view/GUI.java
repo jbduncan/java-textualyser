@@ -7,15 +7,18 @@ package uk.co.bluettduncanj.view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
+
+import net.miginfocom.swing.MigLayout;
 
 
 /**
+ * 
+ * 
  * @author Jonathan Bluett-Duncan
  */
 public class GUI extends JFrame {
 
-  /** serialVersionUID */
+  /** An automatically generated serial version identifier. */
   private static final long serialVersionUID = 1433118288495239121L;
   
   private JPanel contentPane;
@@ -29,12 +32,7 @@ public class GUI extends JFrame {
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     setContentPane(contentPane);
-    GridBagLayout gbl_contentPane = new GridBagLayout();
-    gbl_contentPane.columnWidths = new int[]{0};
-    gbl_contentPane.rowHeights = new int[]{0};
-    gbl_contentPane.columnWeights = new double[]{Double.MIN_VALUE};
-    gbl_contentPane.rowWeights = new double[]{Double.MIN_VALUE};
-    contentPane.setLayout(gbl_contentPane);
+    contentPane.setLayout(new MigLayout("", "[]", "[]"));
   }
 
 }

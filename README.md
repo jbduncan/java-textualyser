@@ -1,6 +1,6 @@
 Notice
 ================
-This project is inactive. Until further notice, I'm keeping it on GitHub for historical reasons.
+This project is inactive. Until further notice, I'm keeping it on GitHub to demonstrate what sort of programming skills I had during my first and second years at university.
 
 Java Textualyser
 ================
